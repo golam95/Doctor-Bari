@@ -16,15 +16,15 @@ This project name is “Student Verification System”. This application is deve
 * Add Post</span> <br>
 * Mange messages</span> <br>
 <br>
-<img src="/Doctor-Bari/img/01.PNG" width=1200 height=450>
+<img src="DoctorBari/img/01.PNG" width=1200 height=450>
 </br>
-<img src="/Doctor-Bari/img/02.PNG" width=1200 height=450>
+<img src="DoctorBari/img/02.PNG" width=1200 height=450>
 </br>
-<img src="/Doctor-Bari/img/03.PNG" width=1200 height=450>
+<img src="DoctorBari/img/03.PNG" width=1200 height=450>
 </br>
-<img src="/Doctor-Bari/img/04.PNG" width=1200 height=450>
+<img src="DoctorBari/img/04.PNG" width=1200 height=450>
 </br>
-<img src="/Doctor-Bari/img/05.PNG" width=1200 height=450>
+<img src="DoctorBari/img/05.PNG" width=1200 height=450>
 </br>
-<img src="/Doctor-Bari/img/06.PNG" width=1200 height=450>
+<img src="DoctorBari/img/06.PNG" width=1200 height=450>
 </br>
