@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/userBase">
+
+<div layout:fragment="mainContent">
+	<section class="breadcrumbs">
+		<div class="container">
+			<div class="d-flex justify-content-between align-items-center">
+				<h2>Post Page</h2>
+				<ol>
+					<li><a th:href="@{/}">Home</a></li>
+					<li>Post Page</li>
+				</ol>
+			</div>
+		</div>
+	</section>
+	<section class="inner-page">
+		<div class="container">
+			<div id="accordion">
+				<div class="card" th:each="book, iStat : ${bookPage.content}">
+					<div class="card-header">
+						<a class="collapsed card-link" data-toggle="collapse"
+							th:href="'#collapseTwo'+${book.postId}">
+							<div>
+								<i class="icofont-speech-comments"></i> <span
+									th:text="${book.title}"></span>
+							</div>
+							<div>
+								<span style="font-size: 10px;"><i
+									class="icofont-calendar"></i> Date: <span
+									th:text="${book.date}"></span></span>
+							</div>
+						</a>
+					</div>
+					<div th:id="'collapseTwo'+ ${book.postId}" class="collapse"
+						data-parent="#accordion">
+						<div class="card-body">
+							<span th:text="${book.body}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<ul class="pagination pagination-sm" style="margin-top: 40px;">
+				<li th:if="${bookPage.totalPages > 0}"
+					th:each="pageNumber : ${pageNumbers}" class="page-item"><a
+					class="page-link"
+					th:href="@{/blog(size=${bookPage.size}, page=${pageNumber})}"><span
+						th:text=${pageNumber}></span></a></li>
+			</ul>
+          </div>
+	</section>
+	<br><br>
+</div>
+<div layout:fragment="usercss">
+<style>
+.select2-container--default .select2-selection--single {
+	background-color: #fff;
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	height: 36px;
+}
+.errorMsg {
+	color: red;
+	font-size: 13px;
+}
+.hellow1 {
+	background-image: url('assets/img/kk.jpg');
+}
+.hellow2 {
+	background-image: url('assets/img/not found.jpg');
+}
+</style>
+</div>
+<div layout:fragment="userscript">
+<script>
+$(document).ready(function(){
+	$("#urlContact").css('display','none');
+		 $("#urlAbout").css('display','none');
+	});
+</script>
+</div>

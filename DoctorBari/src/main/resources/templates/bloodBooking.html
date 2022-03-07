@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/userBase">
+
+
+<div layout:fragment="mainContent">
+	<section class="breadcrumbs">
+		<div class="container">
+			<div class="d-flex justify-content-between align-items-center">
+				<h2>Blood Booking Page</h2>
+				<ol>
+					<li><a th:href="@{/}">Home</a></li>
+					<li>Blood Booking</li>
+				</ol>
+			</div>
+		</div>
+	</section>
+
+	<section class="inner-page">
+	    	<div class="container">
+	        <div class="row">
+			<div class="col-lg-12 col-md-12 ">
+			<div>
+              <strong><p  style="text-align:center;padding:5px;background:#64B5F6;color:white;border-radius:5px;font-size:18px;">BLOOD BOOKING</p></strong> 
+                </div>
+                <br>
+			</div>
+	    	</div>
+	    </div>
+	
+	<div class="container">
+		   <div class="row">
+			<div class="col-lg-4 col-md-4">
+			    <label for="email"><b>Blood Group<span class="manadory">*</span></b></label>
+					<select id="fkId" class="form-control filter">
+						<option value="-1">--Select--</option>
+						<option th:each="resultMap : ${listBloodMap}"
+							th:value="${resultMap.bloodId}"
+							th:text="${resultMap.name}"></option>
+					</select>
+					<span class="errorMsg" id="errorMsgFkId"></span>
+		      </div>
+				<div class="col-lg-3 col-md-3">
+				  <label for="email"><b>Booking Date<span class="manadory">*</span></b></label>
+					<input class="form-control filter" type="date"
+						 id="bookingDate">
+						<span class="errorMsg" id="errorMsgBookingDate"></span>
+				</div>
+				
+				<div class="col-lg-3 col-md-3">
+				  <label for="email"><b>Booking Time<span class="manadory">*</span></b></label>
+					
+					<select id="bookingTime"
+						class="form-control filter">
+						<option value="-1">--Select--</option>
+						<option>9am-10am</option>
+						<option>10am-11am</option>
+						<option>11am-12pm</option>
+						<option>12pm-1pm</option>
+					    <option>2pm-3pm</option>
+						<option>3pm-4pm</option>
+						<option>4pm-5pm</option>
+						<option>5pm-6pm</option>
+						<option>6pm-7pm</option>
+						<option>7pm-8pm</option>
+					</select>
+				    <span class="errorMsg" id="errorMsgBookingTime"></span>
+				</div>
+			    <div class="col-lg-2 col-md-2">
+				 <button type="button" class="btn  btn-success" id="btnBook" style="margin-top:30px;">
+						<i class="icofont-law-order"></i> Booking
+					</button>
+				</div>
+			</div>
+			<div class="row" style="margin-top: 45px; margin-bottom: 40px;">
+				<div class="col-lg-6 col-md-6 offset-md-3 hellow">
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+<div layout:fragment="usercss">
+<style>
+.manadory{
+  color:red;
+}
+.errorMsg {
+	color: red;
+	font-size: 13px;
+}
+</style>
+
+</div>
+
+<div layout:fragment="userscript">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			
+			$("#urlContact").css('display','none');
+			$("#urlAbout").css('display','none');
+			$("#btnBook")
+			.click(
+					function() {
+
+						if (dataValidation()) {
+
+							var bookObj = {};
+							bookObj.fkId = $("#fkId").val();
+							bookObj.bookingDate = $("#bookingDate").val();
+							bookObj.bookingTime = $("#bookingTime").val();
+						
+							
+							$
+									.ajax({
+										type : "POST",
+										contentType : "application/json",
+										url : "/user/saveBloodBook",
+										data : JSON
+												.stringify(bookObj),
+										timeout : 100000,
+										async : true,
+										dataType : 'json',
+										success : function(data) {
+											
+											if(data.msgCode=="201"){
+												
+												$("#errorMsgBookingDate").text("Duplicate Value found!!");
+												
+											}else if(data.msgCode=="200"){
+												
+												$.confirm({
+			                     		         	type: 'green',
+			                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+			                     		            content: 'Successfully Booked!!',
+			                     		   
+			                     		             buttons: {
+			                     		                 ok: function () {
+			                     		                   
+			                     		                 }
+			                     		             }
+			                     		         });
+												clrFrm();
+											}
+										
+										},
+										error : function(
+												xhr,
+												status,
+												error) {
+											alert('error');
+										}
+									});
+
+						}
+
+					});
+			
+			function dataValidation() {
+				
+				var status = true;
+				
+				if ($("#fkId").val() == "-1") {
+					status = false;
+					$("#errorMsgFkId").text("Required Field!!");
+					$("#fkId").css('border','1px solid red');
+					$("#fkId").focus();
+					return status;
+					
+				}else {
+					$("#errorMsgFkId").text("");
+					$("#fkId").css('border','1px solid #CED4DA');
+				}
+				
+				if ($("#bookingDate").val() == "") {
+					status = false;
+					$("#errorMsgBookingDate").text("Required Field!!");
+					$("#bookingDate").css('border','1px solid red');
+					$("#bookingDate").focus();
+					return status;
+					
+			}else {
+					$("#errorMsgBookingDate").text("");
+					$("#bookingDate").css('border','1px solid #CED4DA');
+				}
+				
+				if ($("#bookingTime").val() == "-1") {
+					status = false;
+					$("#errorMsgBookingTime").text("Required Field!!");
+					$("#bookingTime").css('border','1px solid red');
+					$("#bookingTime").focus();
+					return status;
+					
+				}else {
+					$("#errorMsgBookingTime").text("");
+					$("#bookingTime").css('border','1px solid #CED4DA');
+				}
+				
+			   return status;
+			}
+			
+			
+			function clrFrm(){
+				$("#fkId").val('-1');
+				$("#bookingDate").val('');
+				$("#bookingTime").val('-1');
+				//
+				$("#errorMsgBookingDate").text("");
+				$("#bookingDate").css('border','1px solid #CED4DA');
+		       	$("#errorMsgBookingTime").text('');
+				$("#bookingTime").css('border','1px solid #CED4DA');
+	            $("#errorMsgFkId").text("");
+				$("#fkId").css('border','1px solid #CED4DA');
+			}
+			
+		});
+	</script>
+</div>

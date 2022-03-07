@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/userBase">
+
+
+<div layout:fragment="mainContent">
+	<!-- ======= Breadcrumbs Section ======= -->
+	<section class="breadcrumbs">
+		<div class="container">
+
+			<div class="d-flex justify-content-between align-items-center">
+				<h2>Not Found Page</h2>
+				<ol>
+					<li><a th:href="@{/}">Home</a></li>
+					<li>Not Found Page</li>
+				</ol>
+			</div>
+
+		</div>
+	</section>
+
+
+	<section class="inner-page">
+	    	<div class="container">
+				<div>
+                  <strong><h6  style="text-align:center;font-weight:bold;">No results found</h6></strong> 
+                  <strong><h6  style="text-align:center;">We're sorry, We searched far and wide and couldn't find any data your search.</h6></strong> 
+                  <h6 style="text-align:center;"><a th:href="@{/}"><i class="icofont-home"></i>Home</a></h6>
+                </div>
+	    	</div>
+	</section>
+	<br>
+		<br>	
+		
+		
+</div>
+
+<div layout:fragment="usercss">
+<style>
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    height: 36px;
+}
+
+.errorMsg{
+ color:red;
+ font-size:13px;
+}
+.hellow1{
+background-image: url('assets/img/kk.jpg');
+}
+
+.hellow2{
+background-image: url('assets/img/not found.jpg');
+}
+
+</style>
+
+</div>
+
+<div layout:fragment="userscript">
+
+</div>

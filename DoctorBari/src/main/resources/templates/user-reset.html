@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/userBase">
+
+<div layout:fragment="mainContent">
+	<section class="breadcrumbs">
+		<div class="container">
+			<div class="d-flex justify-content-between align-items-center">
+				<h2>Reset Page</h2>
+				<ol>
+					<li><a th:href="@{/}">Home</a></li>
+					<li>Reset</li>
+				</ol>
+			</div>
+		</div>
+	</section>
+	<section class="inner-page">
+		<div class="container">
+			<div class="col-lg-6 col-md-6 offset-md-3">
+				<form>
+					<div class="form-group">
+						<label for="email">Email<span class="errorMsg">*</span></label> 
+						<input type="text" class="form-control" name="email" id="email">
+						<span class="errorMsg" id="errorMsgemail"></span>	
+					</div>
+					<button type="button" class="btn btn-info" id="btnReset">Send</button>
+				</form>
+			</div>
+		</div>
+	</section>
+	<br> <br>
+</div>
+<div layout:fragment="usercss">
+<style>
+.errorMsg {
+	color: red;
+	font-size: 13px;
+}
+</style>
+</div>
+<div layout:fragment="userscript">
+	<script>
+		$(document).ready(function() {
+			
+			$("#urlContact").css('display', 'none');
+			$("#urlAbout").css('display', 'none');
+			
+			
+			$("#btnReset").click(function() {
+			
+					  if (dataValidation()) {
+
+							var uniList = {};
+							uniList.email = $("#email").val();
+							
+				          
+							$
+									.ajax({
+										type : "POST",
+										contentType : "application/json",
+										url : "/user/resetPassword",
+										data : JSON
+												.stringify(uniList),
+										timeout : 100000,
+										async : true,
+										dataType : 'json',
+										success : function(data) {
+											
+											if(data.msgCode=='200'){
+												$("#email").val('');
+												$.confirm({
+			                     		         	type: 'green',
+			                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+			                     		            content: 'An email has been send.Please check your email!!',
+			                     		   
+			                     		             buttons: {
+			                     		                 ok: function () {
+			                     		                	
+			                     		                 }
+			                     		             }
+			                     		         });
+												
+											}else if(data.msgCode=='201'){
+												
+												$.confirm({
+			                     		         	type: 'yellow',
+			                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+			                     		            content: 'Sorry,Invalid email address/',
+			                     		   
+			                     		             buttons: {
+			                     		                 ok: function () {
+			                     		                   
+			                     		                 }
+			                     		             }
+			                     		         });
+											}
+										
+										},
+										error : function(
+												xhr,
+												status,
+												error) {
+											alert("Sorry,Something wrong.Please contact with IT Team!!");
+										}
+									});
+
+						}
+
+					});
+			
+			
+			
+			
+			function dataValidation() {
+				
+				var status = true;
+				
+				if ($("#email").val() == "") {
+					status = false;
+					$("#errorMsgemail").text("Required Field!!");
+					$("#email").css('border','1px solid red');
+					$("#email").focus();
+					return status;
+				} else {
+					$("#errorMsgemail").text("");
+					$("#email").css('border','1px solid #CED4DA');
+				}
+				return status;
+			}
+			
+			
+			
+			
+			
+		});
+	</script>
+</div>

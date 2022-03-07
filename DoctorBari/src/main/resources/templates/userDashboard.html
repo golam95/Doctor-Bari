@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/userBase">
+
+<div layout:fragment="mainContent">
+	<section class="breadcrumbs">
+		<div class="container">
+			<div class="d-flex justify-content-between align-items-center">
+				<h2>DashBoard Page</h2>
+				<ol>
+					<li><a th:href="@{/}">Home</a></li>
+					<li>DashBoard</li>
+				</ol>
+			</div>
+		</div>
+	</section>
+
+	<section class="inner-page">
+		<div class="container">
+			<div class="col-lg-12 col-md-12">
+				<div class="container">
+					<button type="button" class="btn btn-info" id="newMessage">
+						<i class="icofont-plus-circle"></i> Message
+					</button>
+				</div>
+				<br>
+
+				<div class="container mt-3">
+					<ul class="nav nav-tabs">
+						<li class="nav-item"><a class="nav-link active"
+							data-toggle="tab" href="#home"><i
+								class="icofont-ambulance-cross"></i> Ambulance </a></li>
+						<li class="nav-item"><a class="nav-link" data-toggle="tab"
+							href="#blood"><i class="icofont-blood-drop"></i> Blood </a></li>
+						<li class="nav-item"><a class="nav-link" data-toggle="tab"
+							href="#doctor"><i class="icofont-doctor-alt"></i> Doctor </a></li>
+						<li class="nav-item"><a class="nav-link" data-toggle="tab"
+							href="#message"><i class="icofont-facebook-messenger"></i>
+								Message </a></li>
+					</ul>
+					<div class="tab-content">
+						<div id="home" class="container tab-pane active">
+							<br>
+							<h6>Ambulance Order List</h6>
+							<br>
+							<div class="container">
+								<table class="table table-bordered" id="tbl-user-ambulance"
+									style="width: 100%;">
+									<thead>
+										<tr>
+											<th>ID#</th>
+											<th>Name</th>
+											<th>Booking Time</th>
+											<th>Booking Date</th>
+											<th>Price</th>
+											<th>Status</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div id="blood" class="container tab-pane fade">
+							<br>
+							<h6>Blood Order List</h6>
+							<br>
+							<div class="container">
+								<table class="table table-bordered" id="tbl-user-blood"
+									style="width: 100%;">
+									<thead>
+										<tr>
+											<th>ID#</th>
+											<th>Name</th>
+											<th>Booking Time</th>
+											<th>Booking Date</th>
+											<th>Status</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+
+						<div id="doctor" class="container tab-pane fade">
+							<br>
+							<h6>Appointment List</h6>
+							<br>
+							<div class="container">
+								<table class="table table-bordered" id="tbl-user-doctor"
+									style="width: 100%;">
+									<thead>
+										<tr>
+											<th style="width: 10px">#</th>
+							<th style="width: 10px">Dr. Name</th>
+							<th>Time</th>
+							<th>Date</th>
+							<th>Status</th>
+						    <th>Meeting Link</th>
+						    <th>Prescription</th>
+						    <th>Remarks</th>
+						    <th>Diagnostic Center</th>
+										</tr>
+									<tbody style="text-align:center;">
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div id="message" class="container tab-pane fade">
+							<br>
+							<h6>Message List</h6>
+							<br>
+							<div class="container">
+								<table class="table table-bordered" id="tbl-user-message"
+									style="width: 100%;">
+									<thead>
+									<tr>
+										<th>ID#</th>
+										<th>Message</th>
+										<th>Replay Message</th>
+										<th>Date</th>
+										<th>Status</th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+
+
+
+					</div>
+				</div>
+
+			</div>
+
+
+
+		</div>
+	</section>
+	<br> <br>
+
+
+	<div layout:fragment="usercss">
+		<style>
+.errorMsg {
+	color: red;
+	font-size: 13px;
+}
+
+table.dataTable thead th {
+	padding: 10px 18px;
+	border-bottom: 1px solid #FFFFFF !important;
+}
+
+table.dataTable.no-footer {
+	border-bottom: 1px solid #FFFFFF !important;
+}
+</style>
+
+	</div>
+
+	<div layout:fragment="userscript">
+		<script src="/plugins/jquery/jquery.min.js"></script>
+		<script
+			src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+		<script>
+			$(document)
+					.ready(
+							function() {
+
+								$("#urlContact").css('display', 'none');
+								$("#urlAbout").css('display', 'none');
+
+								var i = 0;
+								var table = $('#tbl-user-ambulance')
+										.DataTable(
+												{
+													"sAjaxSource" : "/user/user-amb-book-list",
+													"sAjaxDataProp" : "",
+													"order" : [ [ 0, "asc" ] ],
+													"aoColumns" : [
+															{
+																"mData" : "id",
+																"render" : function(
+																		data,
+																		type,
+																		row) {
+																	i += 1;
+																	return i;
+																}
+															},
+															{
+																"mData" : "name"
+															},
+															{
+																"mData" : "bookingtime"
+															},
+															{
+																"mData" : "bookingdate",
+																"render" : function(
+																		data,
+																		type,
+																		row) {
+																	return getDate(data);
+																}
+															},
+															{
+																"mData" : "price"
+															},
+															{
+																"mData" : "status",
+																"render" : function(
+																		data,
+																		type,
+																		row) {
+																	var getStatus = '';
+																	if (data == '1') {
+																		getStatus = '<span  style="padding:2px;border-radius:5px;background:green;color:#ffffff;">Approved</span>';
+																	} else {
+																		getStatus = '<span style="padding:2px;border-radius:5px;background:red;color:#ffffff;">Pending</span>';
+																	}
+																	return getStatus;
+																}
+															} ],
+													"fnCreatedRow" : function(
+															nRow, aData,
+															iDataIndex) {
+														$('td:eq(1)', nRow)
+																.attr(
+																		"data-id",
+																		aData.id);
+													}
+												});
+
+								var j = 0;
+								var table = $('#tbl-user-blood')
+										.DataTable(
+												{
+													"sAjaxSource" : "/user/user-blood-book-list",
+													"sAjaxDataProp" : "",
+													"order" : [ [ 0, "asc" ] ],
+													"aoColumns" : [
+															{
+																"mData" : "id",
+																"render" : function(
+																		data,
+																		type,
+																		row) {
+																	j += 1;
+																	return j;
+																}
+															},
+															{
+																"mData" : "name"
+															},
+															{
+																"mData" : "bookingtime"
+															},
+															{
+																"mData" : "bookingdate",
+																"render" : function(
+																		data,
+																		type,
+																		row) {
+																	return getDate(data);
+																}
+															},
+															{
+																"mData" : "status",
+																"render" : function(
+																		data,
+																		type,
+																		row) {
+																	var getStatus = '';
+																	if (data == '1') {
+																		getStatus = '<span  style="padding:2px;border-radius:5px;background:green;color:#ffffff;">Approved</span>';
+																	} else {
+																		getStatus = '<span style="padding:2px;border-radius:5px;background:red;color:#ffffff;">Pending</span>';
+																	}
+																	return getStatus;
+																}
+															} ],
+													"fnCreatedRow" : function(
+															nRow, aData,
+															iDataIndex) {
+														$('td:eq(1)', nRow)
+																.attr(
+																		"data-id",
+																		aData.id);
+													}
+												});
+
+							
+								
+								var k=0;
+								var table = $('#tbl-user-doctor')
+								.DataTable(
+										{
+											"sAjaxSource" : "/user/user-doc-appo-list",
+											"sAjaxDataProp" : "",
+											"order" : [ [ 0, "asc" ] ],
+											"aoColumns" : [
+													{
+														"mData" : "id",
+														"render" : function(data, type, row) {
+															k+=1;
+															return k;
+														}
+													},{
+														"mData" : "firstname"
+													},{
+														"mData" : "time"
+													},{
+														"mData" : "date",
+														"render" : function(data, type, row) {
+															return getDate(data);
+														}
+													},{
+														"mData" : "status",
+														"render" : function(data, type, row) {
+															
+														
+															   var getStatus = '';
+															
+								                                if (data == '0') {
+								                                    getStatus = '<span  style="padding:2px;border-radius:5px;background:gray;color:#ffffff;">Pending..</span>';
+								                                } else if(data == '1') {
+								                                   getStatus = '<span  style="padding:2px;border-radius:5px;background:orange;color:#ffffff;">Pending..</span>';
+									                            } else if(data == '2') {
+								                                    getStatus = '<span style="padding:2px;border-radius:5px;background:green;color:#ffffff;">Done</span>';
+								                                } else if(data == '3') {
+							                                       getStatus = '<span style="padding:2px;border-radius:5px;background:red;color:#ffffff;">Reject</span>';
+							                                    }
+								                                
+								                                return getStatus;
+							                             }
+													},{
+														"mData" : "meeting",
+														"render" : function(data, type, row) {
+															
+															var getData='';
+															if(data==''){
+																getData='';
+															}else{
+																getData='<span><a href="'+data+'" target="_blank">Link</a></span>';
+																
+															}
+															
+															return getData;
+								                            
+							                             }
+													},{
+														"mData" : "filepath",
+														"render" : function(data, type, row) {
+														
+															var getData='';
+															if(data==''){
+																getData='';
+															}else{
+																getData='<span><a href="#" id="btnDownload"><i class="icofont-download"></i></a></span>';
+																
+															}
+															
+															return getData;
+								                            
+							                             }
+													},{
+														"mData" : "remark"
+													},{
+														"mData" : "diaCenter"
+													}],
+													"fnCreatedRow": function (nRow, aData, iDataIndex) {
+								                        $('td:eq(1)', nRow).attr("data-id", aData.id);
+								                        $('td:eq(2)', nRow).attr("data-id",aData.filepath);
+								                     }
+							              });
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+
+								$('#tbl-user-doctor tbody')
+										.on(
+												'click',
+												'#btnDownload',
+												function() {
+
+													var curRow = $(this)
+															.closest('tr');
+													var id = curRow.find(
+															'td:eq(1)').attr(
+															"data-id");
+													var filePath = curRow.find(
+															'td:eq(2)').attr(
+															"data-id");
+
+													var a = document
+															.createElement("a");
+													a.href = "data:image/jpg;base64,"
+															+ filePath;
+													a.download = 'Excel format'
+															+ '.txt';
+													a.click();
+
+												});
+
+								var l = 0;
+								var tableUsrMsg = $('#tbl-user-message')
+										.DataTable(
+												{
+													"sAjaxSource" : "/user/user-per-app-list",
+													"sAjaxDataProp" : "",
+													"order" : [ [ 0, "asc" ] ],
+													"aoColumns" : [
+															{
+																"mData" : "id",
+																"render" : function(
+																		data,
+																		type,
+																		row) {
+																	l += 1;
+																	return l;
+																}
+															},
+															{
+																"mData" : "message"
+															},
+															{
+																"mData" : "reMsg"
+															},
+															{
+																"mData" : "date",
+																"render" : function(
+																		data,
+																		type,
+																		row) {
+																	return getDate(data);
+																}
+															},
+															{
+																"mData" : "status",
+																"render" : function(
+																		data,
+																		type,
+																		row) {
+																	var getStatus = '';
+																	if (data == '1') {
+																		getStatus = '<span  style="padding:2px;border-radius:5px;background:green;color:#ffffff;">Approved</span>';
+																	} else {
+																		getStatus = '<span style="padding:2px;border-radius:5px;background:red;color:#ffffff;">Pending</span>';
+																	}
+																	return getStatus;
+																}
+															} ],
+													"fnCreatedRow" : function(
+															nRow, aData,
+															iDataIndex) {
+														$('td:eq(1)', nRow)
+																.attr(
+																		"data-id",
+																		aData.id);
+													}
+												});
+
+								$("#newMessage")
+										.click(
+												function() {
+
+													$
+															.confirm({
+																type : 'green',
+																title : '',
+																content : '<div class="form-group"><label for="comment">Comment:</label><textarea class="form-control" rows="5" id="userMessage"></textarea><span id="errorMsgComment" style="color:red;"></span></div>',
+																buttons : {
+																	Send : function() {
+
+																		if ($(
+																				"#userMessage")
+																				.val() == '') {
+																			$(
+																					"#errorMsgComment")
+																					.text(
+																							"Required Field!!");
+																			$(
+																					"#userMessage")
+																					.css(
+																							'border',
+																							'1px solid red');
+																			$(
+																					"#userMessage")
+																					.focus();
+																			return false;
+																		} else {
+
+																			var uniList = {};
+																			uniList.userMessage = $(
+																					"#userMessage")
+																					.val();
+
+																			$
+																					.ajax({
+																						type : "POST",
+																						contentType : "application/json",
+																						url : "/user/savePersonalMsg",
+																						data : JSON
+																								.stringify(uniList),
+																						timeout : 100000,
+																						async : true,
+																						dataType : 'json',
+																						success : function(
+																								data) {
+
+																							if (data.msgCode == '200') {
+
+																								$
+																										.confirm({
+																											type : 'green',
+																											title : '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '
+																													+ 'Success!!',
+																											content : 'Message send successfully!!',
+
+																											buttons : {
+																												ok : function() {
+
+																												}
+																											}
+																										});
+
+																								l = 0;
+																								tableUsrMsg.ajax
+																										.reload();
+																								$(
+																										"#userMessage")
+																										.val(
+																												'');
+																								$(
+																										"#errorMsgComment")
+																										.text(
+																												"");
+
+																							}
+
+																						},
+																						error : function(
+																								xhr,
+																								status,
+																								error) {
+																							showCustomAlert(
+																									'D',
+																									"Sorry,Something wrong.Please contact with IT Team!!");
+																						}
+																					});
+
+																		}
+
+																	},
+																	cancel : function() {
+																		//close
+																	},
+																}
+															});
+
+												});
+
+								function getDate(dateObject) {
+									var d = new Date(dateObject);
+									var day = d.getDate();
+									var month = d.getMonth() + 1;
+									var year = d.getFullYear();
+									if (day < 10) {
+										day = "0" + day;
+									}
+									if (month < 10) {
+										month = "0" + month;
+									}
+									var date = day + "/" + month + "/" + year;
+
+									return date;
+								}
+
+							});
+		</script>
+
+
+
+
+	</div>

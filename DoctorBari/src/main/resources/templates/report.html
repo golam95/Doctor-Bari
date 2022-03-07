@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+      <link href="/assets/img/tablogo.png" rel="icon">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student varification</title>
+	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+
+    <script type="application/javascript">
+        $(document).ready(function () {
+            var printContents = $('#mainFrame').html();
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            document.body.innerHTML = originalContents;
+		    window.print();
+		  });
+    </script>	
+</head>
+<body style="margin: 0; padding: 0;">
+
+<div id="mainFrame" style="margin-top:20px;">
+    <div class="container">
+   
+    <div class="row" style="margin-left:30px; margin-right:30px;">
+        
+		<div class="col-md-12" style="text-align:center;border:15px solid #96D3E5;">
+		
+		<div style="padding:20px;">
+		  
+		  <img th:src="*{'data:image/jpg;base64,'+ imgList}" alt="jbc" style="width: 90px;" class="img-fluid float-left">
+		  
+		  </div>
+		
+		<div th:each="reportValue : ${reportList}">
+			
+            <div><h3 style="font-size: 28px; margin-top:2px;font-family: 'Dancing Script', cursive;color:#2C3A91;" th:text="${reportValue.uniName}"></h3>
+			
+			</div>
+			
+			<div><h3 style="font-size: 19px; margin-top: 14px;font-family: 'Dancing Script', cursive;color:#2C3A91;">Name: <span th:text="${reportValue.stdName}"></span> </h3></div>
+			
+			<div><h3 style="font-size: 19px; margin-top: 14px;font-family: 'Dancing Script', cursive;color:#2C3A91;">Roll No: <span th:text="${reportValue.std_id}"></span></h3></div>
+			
+			<div><h3 style="font-size: 19px; margin-top: 14px;font-family: 'Dancing Script', cursive;color:#2C3A91;">Dept: <span th:text="${reportValue.deptName}"></span></h3></div>
+			
+			<div><h3 style="font-size: 19px; margin-top: 14px;font-family: 'Dancing Script', cursive;color:#2C3A91;">Email: <span th:text="${reportValue.email}"></span></h3></div>
+			
+			<div><h3 style="font-size: 19px; margin-top: 14px;font-family: 'Dancing Script', cursive;color:#2C3A91;">Phone: <span th:text="${reportValue.contact_no}"></span></h3></div>
+			<br>
+			<div><h3 style="font-size: 14px; margin-top: 14px;font-family: 'Dancing Script', cursive;color:#2C3A91;">Date:<span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></span></h3> </div>
+			
+			<div><h3 style="font-size: 14px; margin-top: 14px;font-family: 'Dancing Script', cursive;color:#2C3A91;">Power By Student Verification System</h3> </div>
+			
+			</div>
+		
+        </div>
+    </div>
+  	
+    </div>
+</div>
+
+</body>
+</html>

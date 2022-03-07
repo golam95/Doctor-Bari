@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/doctorBase">
+
+<div layout:fragment="adminContent">
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h4 class="m-0">DashBoard</h4>
+				</div>
+				<!-- /.col -->
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a th:href="@{/doctor/dashboard}">Home</a></li>
+						<li class="breadcrumb-item active">Dashboard</li>
+					</ol>
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- /.row -->
+		</div>
+	</div>
+	<div class="container-fluid">
+		
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+				<div class="card-body" style="display: block;">
+				<table class="table table-bordered" id="tbl-user-doctor">
+					<thead>
+						<tr style="text-align:center;">
+							<th style="width: 10px">#</th>
+							<th style="width: 10px">Patient Name</th>
+							<th>Time</th>
+							<th>Date</th>
+							<th>Status</th>
+						    <th>Meeting Link</th>
+						    <th>Prescription</th>
+						    <th>Remarks</th>
+						    <th>Diagnostic Center</th>
+						    <th style="width: 100px">Action</th>
+						</tr>
+					</thead >
+					<tbody style="text-align:center;">
+				
+					</tbody>
+				</table>
+			</div>
+				
+				
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div layout:fragment="script">
+
+	<script type="text/javascript">
+		$(document)
+				.ready(
+						function() {
+							 
+							$("#nav-linkDashboard").addClass("active");
+						
+							var k=0;
+							var table = $('#tbl-user-doctor')
+							.DataTable(
+									{
+										"sAjaxSource" : "/doctor/ajax/doctor-dashboard-list",
+										"sAjaxDataProp" : "",
+										"order" : [ [ 0, "asc" ] ],
+										"aoColumns" : [
+												{
+													"mData" : "id",
+													"render" : function(data, type, row) {
+														k+=1;
+														return k;
+													}
+												},{
+													"mData" : "username"
+												},{
+													"mData" : "time"
+												},{
+													"mData" : "date",
+													"render" : function(data, type, row) {
+														return getDate(data);
+													}
+												},{
+													"mData" : "status",
+													"render" : function(data, type, row) {
+														 
+														   var getStatus = '';
+														
+							                                if (data == '0') {
+							                                    getStatus = '<span  style="padding:2px;border-radius:5px;background:gray;color:#ffffff;">Awaiting For Meeting</span>';
+							                                } else if(data == '1') {
+							                                   getStatus = '<span  style="padding:2px;border-radius:5px;background:orange;color:#ffffff;">Awaiting For Prescription</span>';
+								                            } else if(data == '2') {
+							                                    getStatus = '<span style="padding:2px;border-radius:5px;background:green;color:#ffffff;">Appoinment Done</span>';
+							                                } else if(data == '3') {
+						                                       getStatus = '<span style="padding:2px;border-radius:5px;background:red;color:#ffffff;">Reject</span>';
+						                                    }
+							                                
+							                                return getStatus;
+						                             }
+												},{
+													"mData" : "meeting",
+													"render" : function(data, type, row) {
+														
+														var getData='';
+														if(data==''){
+															getData='';
+														}else{
+															getData='<span><a href="'+data+'" target="_blank"><i class="fa fa-hand-pointer" aria-hidden="true"></i> Click Here</a></span>';
+															
+														}
+														
+														return getData;
+							                            
+						                             }
+												},{
+													"mData" : "filepath",
+													"render" : function(data, type, row) {
+													
+														var getData='';
+														if(data==''){
+															getData='';
+														}else{
+															getData='<span><a href="#" id="btnDownload"><i class="fa fa-download" aria-hidden="true"></i> Download</a></span>';
+															
+														}
+														
+														return getData;
+							                            
+						                             }
+												},{
+													"mData" : "remark"
+												},{
+													"mData" : "diaCenter"
+												},{
+													"mData" : "status",
+													"render" : function(data, type, row) {
+														
+														var getDiv='';
+														
+														if (data == '0') {
+															getDiv = '<div class="btn-group btn-group-sm"> <a href="#" class="btn btn-info" id="editUnID"><i class="fa fa-check-square"></i></a><a href="#" class="btn btn-danger" id="deleteUnID"><i class="fa fa-trash"></i></a></div>';
+						                                } else if(data == '1') {
+						                                	getDiv = '<div class="btn-group btn-group-sm"> <a href="#" class="btn btn-info" id="editFile"><i class="fa fa-check-square"></i> Prescription</a></div>';
+						                                } else if(data == '2') {
+						                                	getDiv = '<div class="btn-group btn-group-sm"><a href="#" class="btn btn-danger" id="deleteUnID"><i class="fa fa-trash"></i></a></div>';
+						                                }
+						                                return getDiv;
+						                             }
+												}],
+												"fnCreatedRow": function (nRow, aData, iDataIndex) {
+							                        $('td:eq(1)', nRow).attr("data-id", aData.id);
+							                        $('td:eq(2)', nRow).attr("data-id",aData.filepath);
+							                     }
+						              });
+							
+							
+							
+							$('#tbl-user-doctor tbody').on('click', '#editUnID', function () {
+								   
+								   var curRow = $(this).closest('tr');
+								   var id = curRow.find('td:eq(1)').attr("data-id");
+								   
+								   $.confirm({
+					  		         	type: 'green',
+					  		         	title: '',
+					  		            content: '<div class="form-group"><label for="comment">Meeting Link:</label> <input type="text" class="form-control" id="userMessage"><span id="errorMsgComment" style="color:red;"></span></div>',
+					                         buttons: {
+					  		                 Send: function () {
+					  		                	 
+					  		                	 if($("#userMessage").val()==''){
+					  		                		$("#errorMsgComment").text("Required Field!!");
+													$("#userMessage").css('border','1px solid red');
+												    $("#userMessage").focus();
+												    return false;
+					  		                	 }else{
+					  		                		 
+					  		       				var uniList = {};
+												uniList.meetingLink = $("#userMessage").val();
+												uniList.appointId = id;
+												
+									           
+												$
+														.ajax({
+															type : "POST",
+															contentType : "application/json",
+															url : "/doctor/ajax/saveMeetingLink",
+															data : JSON
+																	.stringify(uniList),
+															timeout : 100000,
+															async : true,
+															dataType : 'json',
+															success : function(data) {
+																
+																if(data.msgCode=='200'){
+																 
+																	$.confirm({
+									                     		         	type: 'green',
+									                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+									                     		            content: 'Confirm successfully!!',
+									                     		   
+									                     		             buttons: {
+									                     		                 ok: function () {
+									                     		                   
+									                     		                 }
+									                     		             }
+									                     		         });
+																	
+																	l=0;
+																	table.ajax.reload();
+																	$("#userMessage").val('');
+																	$("#errorMsgComment").text("");
+																	
+														
+																}
+															
+															},
+															error : function(
+																	xhr,
+																	status,
+																	error) {
+																showCustomAlert(
+																		'D',
+																		"Sorry,Something wrong.Please contact with IT Team!!");
+															}
+														}); 
+					  		                		 
+					  		                		 
+					  		                		 
+					  		                	 }
+					  		                	 
+					  		                	 
+					  		                   
+					  		                 },
+					  		               cancel: function () {
+					  		                 //close
+					  		             },
+					  		             }
+					  		         });
+								   
+								   
+							     
+								 // editFile
+								   //deleteUnID
+								   
+								   
+							    });
+							
+							
+	
+							
+							$(document).on("change", "#userMessage", function(e) {
+								
+								if($("#userMessage").val()!=''){
+									
+									
+									$.get("/doctor/ajax/getDiagonstic",
+											
+											function(data, status) {
+												var dropdownDia = $('#txtdiagonstices');
+												dropdownDia.empty();
+												dropdownDia.append($('<option/>', {
+													value : "-1",
+													text : "--Select--"
+												}));
+												$.each(data, function(index, branchbank) {
+													dropdownDia.append($('<option/>', {
+														value : branchbank.diaId,
+														text : branchbank.name
+														
+													}));
+
+												});
+
+											});
+									
+									
+									
+									
+									
+								}else{
+									
+									var dropdownDia = $('#txtdiagonstices');
+									dropdownDia.empty();
+									dropdownDia.append($('<option/>', {
+										value : "-1",
+										text : "--Select--"
+									}));
+									
+								}
+								
+					
+							});
+							
+							     
+						
+							$('#tbl-user-doctor tbody').on('click', '#editFile', function () {
+								   
+								   var curRow = $(this).closest('tr');
+								   var id = curRow.find('td:eq(1)').attr("data-id");
+								   
+								   var frmContent= '<form id="emp_general_form" enctype="multipart/form-data"><div class="form-group"><label for="comment">File</label> <input type="file" name="file" class="form-control" id="userMessage"><span id="errorMsgComment" style="color:red;"></span></div><div class="form-group"><label for="comment">Diagnostic Center</label>  <select class="form-control" id="txtdiagonstices"> <option value="-1">--Select--</option></select><span id="errorMsgDiagon" style="color:red;"></span></div></form>';
+									  
+								   $.confirm({
+					  		         	type: 'green',
+					  		         	title: '',
+					  		            content:frmContent,
+					  		            buttons: {
+					  		                 Send: function () {
+					  		                	 
+					  		                	 if($("#userMessage").val()==''){
+					  		                		 
+					  		                		$("#txtdiagonstices").css('border','1px solid #CED4DA');
+					  		                		$("#errorMsgDiagon").text("");
+					  		                		 
+					  		                		$("#errorMsgComment").text("Required Field!!");
+													$("#userMessage").css('border','1px solid red');
+												    $("#userMessage").focus();
+												    return false;
+												    
+					  		                	 }else if($("#txtdiagonstices").val()=='-1'){
+					  		                		$("#userMessage").css('border','1px solid #CED4DA');
+					  		                		$("#errorMsgComment").text("");
+					  		                		//
+					  		                		$("#errorMsgDiagon").text("Required Field!!");
+													$("#txtdiagonstices").css('border','1px solid red');
+												    $("#txtdiagonstices").focus();
+												    return false;
+					  		                	 }else{
+					  		                		
+					  		       				var uniList = {};
+												uniList.meetingLink = $("#userMessage").val();
+												uniList.diaCenter = $("#txtdiagonstices").val();
+												uniList.appointId = id;
+										
+												var form = $('#emp_general_form')[0];
+												var data = new FormData(form);
+												data.append("uniList",JSON.stringify(uniList));
+												
+											
+												
+												$
+														.ajax({
+															type : "POST",
+															enctype : 'multipart/form-data',
+															contentType : "application/json",
+															url : "/doctor/ajax/saveMeetingFile",
+															data :data,
+															timeout : 100000,
+															processData : false,
+															contentType : false,
+															cache : false,
+															dataType : 'json',
+															success : function(data) {
+																
+																if(data.msgCode=='200'){
+																 
+																	$.confirm({
+									                     		         	type: 'green',
+									                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+									                     		            content: 'Confirm successfully!!',
+									                     		   
+									                     		             buttons: {
+									                     		                 ok: function () {
+									                     		                   
+									                     		                 }
+									                     		             }
+									                     		         });
+																	
+																	l=0;
+																	table.ajax.reload();
+																	$("#userMessage").val('');
+																	$("#errorMsgComment").text("");
+																	
+														
+																}
+															
+															},
+															error : function(
+																	xhr,
+																	status,
+																	error) {
+																showCustomAlert(
+																		'D',
+																		"Sorry,Something wrong.Please contact with IT Team!!");
+															}
+														}); 
+					  		                		 
+					  		                		 
+					  		                		 
+					  		                	 }
+					  		                	 
+					  		                	 
+					  		                   
+					  		                 },
+					  		               cancel: function () {
+					  		                 //close
+					  		             },
+					  		             }
+					  		         });
+								   
+								   
+							     
+								 // 
+								   //deleteUnID
+								   
+								   
+							    });
+							
+							
+							
+							
+							$('#tbl-user-doctor tbody').on('click', '#deleteUnID', function () {
+								
+								   var curRow = $(this).closest('tr');
+								   var id = curRow.find('td:eq(1)').attr("data-id");
+								   
+								   $.confirm({
+					  		         	type: 'green',
+					  		         	title: '',
+					  		            content: '<div class="form-group"><label for="comment">Remarks:</label><textarea  class="form-control" id="userMessage" rows="4" cols="50"></textarea><span id="errorMsgComment" style="color:red;"></span></div>',
+					                         buttons: {
+					  		                 Send: function () {
+					  		                	 
+					  		                	 if($("#userMessage").val()==''){
+					  		                		$("#errorMsgComment").text("Required Field!!");
+													$("#userMessage").css('border','1px solid red');
+												    $("#userMessage").focus();
+												    return false;
+					  		                	 }else{
+					  		                		 
+					  		       				var uniList = {};
+												uniList.remark = $("#userMessage").val();
+												uniList.appointId = id;
+												
+									           
+												$
+														.ajax({
+															type : "POST",
+															contentType : "application/json",
+															url : "/doctor/ajax/saveMeetingReject",
+															data : JSON
+																	.stringify(uniList),
+															timeout : 100000,
+															async : true,
+															dataType : 'json',
+															success : function(data) {
+																
+																if(data.msgCode=='200'){
+																 
+																	$.confirm({
+									                     		         	type: 'green',
+									                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+									                     		            content: 'Appoinment cancel successfully!!',
+									                     		   
+									                     		             buttons: {
+									                     		                 ok: function () {
+									                     		                   
+									                     		                 }
+									                     		             }
+									                     		         });
+																	
+																	l=0;
+																	table.ajax.reload();
+																	$("#userMessage").val('');
+																	$("#errorMsgComment").text("");
+																	
+														
+																}
+															
+															},
+															error : function(
+																	xhr,
+																	status,
+																	error) {
+																showCustomAlert(
+																		'D',
+																		"Sorry,Something wrong.Please contact with IT Team!!");
+															}
+														}); 
+					  		                		 
+					  		                		 
+					  		                		 
+					  		                	 }
+					  		                	 
+					  		                	 
+					  		                   
+					  		                 },
+					  		               cancel: function () {
+					  		                 //close
+					  		             },
+					  		             }
+					  		         });
+								   
+								   
+							     
+								 // editFile
+								   //deleteUnID
+								   
+								   
+							    });
+							
+							
+							
+							
+
+								$('#tbl-user-doctor tbody').on('click', '#btnDownload', function () {
+									   
+									   var curRow = $(this).closest('tr');
+									   var id = curRow.find('td:eq(1)').attr("data-id");
+									   var filePath = curRow.find('td:eq(2)').attr("data-id");
+									   
+									   var a = document.createElement("a");
+									   a.href = "data:image/jpg;base64," + filePath;
+							            a.download = 'Excel format' + '.txt';
+							            a.click();
+	
+						
+								 });
+						
+						
+						
+						
+						
+						});
+		
+		</script>
+						
+
+</div>
+
+<div layout:fragment="css"></div>

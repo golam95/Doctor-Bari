@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/base">
+
+<div layout:fragment="adminContent" id="scroll">
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h4 class="m-0">View Blood Booking Information</h4>
+				</div>
+				<!-- /.col -->
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
+						<li class="breadcrumb-item active">Blood Booking</li>
+					</ol>
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- /.row -->
+		</div>
+	</div>
+	
+	<div class="container-fluid">
+		<div class="card card-default">
+			<div class="card-header">
+				<h3 class="card-title"></h3>
+				<div class="card-tools">
+					<button type="button" class="btn btn-tool"
+						data-card-widget="collapse">
+						<i class="fas fa-minus"></i>
+					</button>
+					<button type="button" class="btn btn-tool"
+						data-card-widget="remove">
+						<i class="fas fa-times"></i>
+					</button>
+				</div>
+			</div>
+			<!-- /.card-header -->
+			<div class="card-body" style="display: block;">
+				<table class="table table-bordered" id="tbl-university">
+	
+					<thead>
+						<tr style="text-align:center;">
+							<th style="width: 10px">#</th>
+							<th>Name</th>
+							<th>Booking Time</th>
+							<th>Booking Date</th>
+							<th>Status</th>
+						    <th style="width: 100px">Action</th>
+						</tr>
+					</thead >
+					<tbody style="text-align:center;">
+				
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div layout:fragment="script">
+	<script type="text/javascript">
+		$(document)
+				.ready(
+						function() {
+						
+						
+							$("#bookingId").addClass("active menu-is-opening menu-open");
+							$("#nav-viewBloodBooking").addClass("active");
+					
+							var i=0;
+							var table = $('#tbl-university')
+									.DataTable(
+											{
+												"sAjaxSource" : "/admin/ajax/view-blood-booking",
+												"sAjaxDataProp" : "",
+												"order" : [ [ 0, "asc" ] ],
+												"aoColumns" : [
+														{
+															"mData" : "id",
+															"render" : function(data, type, row) {
+																i+=1;
+																return i;
+															}
+														},
+														{
+															"mData" : "name"
+														},{
+															"mData" : "bookingtime"
+														},
+														{
+															"mData" : "bookingdate",
+															"render" : function(data, type, row) {
+																return getDate(data);
+															}
+														},{
+															"mData" : "status",
+															"render" : function(data, type, row) {
+																  var getStatus = '';
+									                                if (data == '1') {
+									                                    getStatus = '<span  style="padding:2px;border-radius:5px;background:green;color:#ffffff;">Approved</span>';
+									                                } else {
+									                                    getStatus = '<span style="padding:2px;border-radius:5px;background:red;color:#ffffff;">Pending</span>';
+									                                }
+									                                return getStatus;
+                                                             }
+														},{
+															"className" : "dt-btn",
+															"render" : function() {
+																return '<div class="btn-group btn-group-sm"> <a href="#" class="btn btn-info" id="editUnID"><i class="fas fa-clipboard-check"></i></a><a href="#" class="btn btn-danger" id="deleteUnID"><i class="fas fa-trash"></i></a></div>';
+															}
+														} ],
+														"fnCreatedRow": function (nRow, aData, iDataIndex) {
+									                        $('td:eq(1)', nRow).attr("data-id", aData.id);
+									                     }
+                                              });							 
+						
+ 
+							   
+							   $('#tbl-university tbody').on('click', '#deleteUnID', function () {
+								   
+								   var curRow = $(this).closest('tr');
+							        var contactId = curRow.find('td:eq(1)').attr("data-id");
+							        
+							        if (contactId != '') {
+							        	
+							            $.confirm({
+							            	type: 'orange',
+							            	title: '<i class="fa fa-exclamation-triangle" aria-hidden="true" style="color:orange;"></i> '+'Confirm!!',
+							                content: 'Do you want to delete?',
+							                buttons: {
+							                    Yes: function () {
+							                    	
+							                        $.ajax({
+							                            url: "/admin/ajax/delete-blood-booking?id=" + contactId,
+							                            type: 'GET',
+							                            dataType: 'json',
+							                            success: function (data) {
+							                            	
+							                            	if(data.msgCode=='200'){
+							                            		i=0;
+																 $.confirm({
+							                     		         	type: 'green',
+							                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+							                     		             content: 'Delete successfully!!',
+							                                             buttons: {
+							                     		                 ok: function () {
+							                     		                   
+							                     		                 }
+							                     		             }
+							                     		         });
+							                            		table.ajax.reload();
+														}
+							                              
+							                            },
+							                            error: function (xhr, status, error) {
+							                                showAlertByType('Something Wrong!', "F");
+							                            }
+							                        });
+							                    },
+							                    No: function () {
+
+							                    }
+							                }
+							            });
+							        }
+							    });
+							   
+							   
+							   
+	   $('#tbl-university tbody').on('click', '#editUnID', function () {
+								   
+								   var curRow = $(this).closest('tr');
+							        var contactId = curRow.find('td:eq(1)').attr("data-id");
+							        
+							        if (contactId != '') {
+							        	
+							            $.confirm({
+							            	type: 'orange',
+							            	title: '<i class="fa fa-exclamation-triangle" aria-hidden="true" style="color:orange;"></i> '+'Confirm!!',
+							                content: 'Do you want to Approved?',
+							                buttons: {
+							                    Yes: function () {
+							                    	
+							                        $.ajax({
+							                            url: "/admin/ajax/approve-blood-booking?id=" + contactId,
+							                            type: 'GET',
+							                            dataType: 'json',
+							                            success: function (data) {
+							                            	
+							                            	if(data.msgCode=='200'){
+							                            		i=0;
+																 $.confirm({
+							                     		         	type: 'green',
+							                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+							                     		             content: 'Approved Successfully!!',
+							                                             buttons: {
+							                     		                 ok: function () {
+							                     		                   
+							                     		                 }
+							                     		             }
+							                     		         });
+							                            		table.ajax.reload();
+														}
+							                              
+							                            },
+							                            error: function (xhr, status, error) {
+							                                showAlertByType('Something Wrong!', "F");
+							                            }
+							                        });
+							                    },
+							                    No: function () {
+
+							                    }
+							                }
+							            });
+							        }
+							    });
+							   
+							   
+						
+						});
+	</script>
+
+</div>
+
+<div layout:fragment="css">
+	<style>
+.errorMsg {
+	color: red;
+	font-size: 13px;
+}
+table.dataTable thead th, table.dataTable thead td {
+    border-bottom: 1px solid #DEE2E6;
+}
+table.dataTable.no-footer {
+    border-bottom: 1px solid #DEE2E6;
+}
+</style>
+</div>

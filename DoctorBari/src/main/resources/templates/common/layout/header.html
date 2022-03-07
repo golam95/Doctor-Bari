@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<div th:fragment="adminheader">
+<head>
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+	<link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet"
+		href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+	<link rel="stylesheet" href="/dist/css/adminlte.min.css">
+	<link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
+	<div layout:fragment="css"></div>
+	</head>
+</div>
+
+<body>
+	<!-- ======= Top Bar ======= -->
+	<section id="topbar" class="d-none d-lg-block"
+		style="background: #94CAC5;">
+		<div class="container clearfix">
+			<div class="contact-info float-left" style="color: #ffffff;">
+				<i class="icofont-envelope" style="color: #ffffff;"></i><a
+					href="mailto:contact@example.com" style="color: #ffffff;">contact@example.com</a>
+				<i class="icofont-phone" style="color: #ffffff;"></i> +1 5589 55488
+				55
+			</div>
+			<div class="social-links float-right">
+				<a href="#" class="twitter" style="color: #ffffff;"><i
+					class="icofont-twitter"></i></a> <a href="#" class="facebook"><i
+					class="icofont-facebook" style="color: #ffffff;"></i></a> <a href="#"
+					class="instagram"><i class="icofont-instagram"
+					style="color: #ffffff;"></i></a> <a href="#" class="skype"><i
+					class="icofont-skype" style="color: #ffffff;"></i></a> <a href="#"
+					class="linkedin"><i class="icofont-linkedin"
+					style="color: #ffffff;"></i></i></a>
+			</div>
+		</div>
+	</section>
+
+	<!-- ======= Header ======= -->
+	<header id="header">
+		<div class="container">
+
+			<div class="logo float-left">
+				<h1 class="text-light">
+					<a href="index.html"><img src="assets/img/F-LOGO.PNG"
+						class="img-fluid" alt=""></a>
+				</h1>
+		    </div>
+
+			<nav class="nav-menu float-right d-none d-lg-block">
+				<ul>
+					<li class="active"><a href="index.html"
+						style="font-size: 16px; font-weight: bold; font-family: 'Dosis';">Home</a></li>
+					<li><a href="#about"
+						style="font-size: 16px; font-weight: bold; font-family: 'Dosis';">About
+							Us</a></li>
+					<li><a href="#contact"
+						style="font-size: 16px; font-weight: bold; font-family: 'Dosis';"><span>Contact
+								Us</span></a></li>
+					<li><a href="javascript:void(0);"> 
+					
+					<input type="email"
+							name="email"><input type="submit" form="form1" value="Submit">
+  
+							</a>
+					</li>
+				</ul>
+			</nav>
+			
+			
+		</div>
+	</header>
+	<!-- End Header -->

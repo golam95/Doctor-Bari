@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/userBase">
+
+<div layout:fragment="mainContent">
+	<section class="breadcrumbs">
+		<div class="container">
+			<div class="d-flex justify-content-between align-items-center">
+				<h2>LogIn Page</h2>
+				<ol>
+					<li><a th:href="@{/}">Home</a></li>
+					<li>LogIn</li>
+				</ol>
+			</div>
+		</div>
+	</section>
+	<section class="inner-page">
+		<div class="container">
+			<div class="col-lg-6 col-md-6 offset-md-3">
+			
+			<div th:if="${param.error}"
+								class="alert alert-danger alert-dismissible">
+								<a href="#" class="close" data-dismiss="alert"
+									aria-label="close">&times;</a> <strong>Error!</strong> Invalid
+								username and password.
+							</div>
+
+							<div th:if="${param.logout}"
+								class="alert alert-success alert-dismissible">
+								<a href="#" class="close" data-dismiss="alert"
+									aria-label="close">&times;</a> <strong>Error!</strong> You have
+								been logged out.
+							</div>
+
+
+				<form th:action="@{/authenticateTheUser}" method="POST">
+				
+					<div class="form-group">
+						<label for="email">UserName</label> <input type="text"
+							class="form-control" name="username">
+					</div>
+					
+					<div class="form-group">
+						<label for="pwd">Password</label> <input type="password"
+							class="form-control" name="password">
+					</div>
+					
+					<div class="form-group" style="float: right;">
+						<a th:href="@{/resetpass}" class="btn btn-default">Forgot Password?</a>
+					</div>
+					
+					<button type="submit" class="btn btn-info">LogIn</button>
+				</form>
+				
+			</div>
+		</div>
+	</section>
+	<br> <br>
+</div>
+<div layout:fragment="usercss">
+	<style>
+.select2-container--default .select2-selection--single {
+	background-color: #fff;
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	height: 36px;
+}
+.errorMsg {
+	color: red;
+	font-size: 13px;
+}
+.hellow1 {
+	background-image: url('assets/img/kk.jpg');
+}
+.hellow2 {
+	background-image: url('assets/img/not found.jpg');
+}
+</style>
+</div>
+<div layout:fragment="userscript">
+	<script>
+		$(document).ready(function() {
+			$("#urlContact").css('display', 'none');
+			$("#urlAbout").css('display', 'none');
+		});
+	</script>
+
+</div>

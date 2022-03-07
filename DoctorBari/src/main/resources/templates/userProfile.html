@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/userBase">
+
+
+<div layout:fragment="mainContent">
+	<section class="breadcrumbs">
+		<div class="container">
+			<div class="d-flex justify-content-between align-items-center">
+				<h2>Profile Page</h2>
+				<ol>
+					<li><a th:href="@{/}">Home</a></li>
+					<li>Profile</li>
+				</ol>
+			</div>
+		</div>
+	</section>
+	<section class="inner-page">
+		<div class="container">
+			<div class="col-lg-10 col-md-10 offset-md-1">
+				<div class="container"></div>
+				<br>
+				<div class="container mt-3">
+					<ul class="nav nav-tabs">
+						<li class="nav-item"><a class="nav-link active"
+							data-toggle="tab" href="#home"><i
+								class="icofont-man-in-glasses"></i> My Profile</a></li>
+						<li class="nav-item"><a class="nav-link" data-toggle="tab"
+							href="#blood"><i class="icofont-ui-settings"></i> Update Information</a></li>
+					</ul>
+					<div class="tab-content">
+						<div id="home" class="container tab-pane active">
+							<br>
+							<div class="container">
+								<form>
+									<div class="form-group">
+										<label for="email">Name:</label> <input disabled type="text"
+											class="form-control"  th:value="${usrProfile.firstname}">
+									</div>
+									<div class="form-group">
+										<label for="email">UserName:</label> <input disabled type="text"
+											class="form-control"  th:value="${usrProfile.userName}">
+									</div>
+									<div class="form-group">
+										<label for="email">Name:</label> <input disabled type="text"
+											class="form-control"  th:value="${usrProfile.email}">
+									</div>
+								</form>
+							</div>
+						</div>
+						<div id="blood" class="container tab-pane fade">
+							<br>
+							<div class="container">
+								<form>
+								
+								<div class="form-group">
+										<label for="email">UserName:</label> <input disabled type="text"
+											class="form-control" id="userName" th:value="${usrProfile.userName}">
+								</div>
+								
+								<div class="form-group">
+										<label for="email">Name:</label> <input  type="text"
+											class="form-control" id="firstname" th:value="${usrProfile.firstname}">
+											<span class="errorMsg" id="errorMsginputName"></span>
+											
+								</div>
+									
+									<div class="form-group">
+										<label for="email">Email:</label> <input  type="text"
+											class="form-control" id="email" th:value="${usrProfile.email}">
+											<span class="errorMsg" id="errorMsginputemail"></span>
+									</div>
+								
+							
+									<div class="form-group">
+										<label for="email">Password:</label> <input
+											type="password" class="form-control" id="newPassword">
+												<span class="errorMsg" id="errorMsgPassword"></span>
+									</div>
+									<button type="button" class="btn btn-info" id="btnUpdate">Update</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	</div>
+	<br> <br>
+	
+	<div layout:fragment="usercss">
+<style>
+
+.errorMsg {
+	color: red;
+	font-size: 13px;
+}
+
+</style>
+	</div>
+	<div layout:fragment="userscript">
+		<script>
+			$(document).ready(function() {
+				$("#urlContact").css('display', 'none');
+				$("#urlAbout").css('display', 'none');
+				
+				$("#btnUpdate")
+				.click(
+						function() {
+							
+							if (dataValidation()) {
+								
+								var uniList = {};
+								uniList.firstname = $("#firstname").val();
+								uniList.userName = $("#userName").val();
+								uniList.email = $("#email").val();
+								uniList.newPassword = $("#newPassword").val();
+							
+								$
+										.ajax({
+											type : "POST",
+											contentType : "application/json",
+											url : "/user/updateProfile",
+											data : JSON.stringify(uniList),
+											timeout : 100000,
+											async : true,
+											dataType : 'json',
+											success : function(data) {
+												
+												if(data.msgCode=='200'){
+													
+												   $.confirm({
+					                     		         	type: 'green',
+					                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+					                     		             content: 'profile update successfully.',
+					                     		   
+					                     		             buttons: {
+					                     		                 ok: function () {
+					                     		                   
+					                     		                	 
+					                     		                 }
+					                     		             }
+					                     		         });
+												   }
+											
+											},
+											error : function(
+													xhr,
+													status,
+													error) {
+											     alert('Error ');
+											}
+										});
+								
+								
+								
+								
+							}
+							
+							
+						});
+						
+				
+				
+				
+				function dataValidation() {
+					var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+					var status = true;
+
+					if ($("#firstname").val() == "") {
+						status = false;
+						$("#errorMsginputName").text(
+								"Required Field!!");
+						$("#firstname").css('border',
+								'1px solid red');
+						$("#firstname").focus();
+						return status;
+
+					} else if ($("#firstname").val().length > 150) {
+						status = false;
+						$("#errorMsginputName").text(
+								"Allow maximum 150 characters!!");
+						$("#firstname").css('border',
+								'1px solid red');
+						$("#firstname").focus();
+						return status;
+
+					} else if ($("#firstname").val().length < 2) {
+						status = false;
+						$("#errorMsginputName").text(
+								"Length must be greater than 2 characters!!");
+						$("#firstname").css('border',
+								'1px solid red');
+						$("#firstname").focus();
+						return status;
+						
+					} else if ($("#firstname").val()<= 1) {
+						status = false;
+						$("#errorMsginputName").text(
+								"Length must be greater than 1 characters!!");
+						$("#firstname").css('border',
+								'1px solid red');
+						$("#firstname").focus();
+						return status;
+						
+					} else if ($.isNumeric($("#firstname").val())) {
+						status = false;
+						$("#errorMsginputName").text(
+								"Invalid Data!!");
+						$("#firstname").css('border',
+								'1px solid red');
+						$("#firstname").focus();
+						return status;
+
+					} else {
+						$("#errorMsginputName").text("");
+						$("#firstname").css('border',
+								'1px solid #CED4DA');
+					}
+					
+					
+					if($("#email").val()==''){
+						  status=false;
+						  $("#errorMsginputemail").text('Required Field!!');
+							$("#email").css('border',
+							'1px solid red');
+					$("#email").focus();
+						  return status;
+				
+					 }else 
+						 $("#errorMsginputemail").text('');
+					$("#email").css('border',
+					'1px solid #CED4DA');
+					
+				
+					if($("#newPassword").val()!=''){
+						
+						if($("#newPassword").val().length<8){
+							 status=false;
+							 $("#errorMsgPassword").text('Length must be 8 characters!!');
+							 $("#newPassword").css('border','1px solid red');
+							 $("#newPassword").focus();
+						}else  
+							$("#errorMsgPassword").text('');
+						$("#newPassword").css('border','1px solid #CED4DA');
+					} 
+					return status;
+				}
+				
+				
+			});
+		</script>
+	</div>

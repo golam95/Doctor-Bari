@@ -1,0 +1,335 @@
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/userBase">
+
+<div layout:fragment="mainContent">
+
+<div th:replace="common/layout/banner :: bammer"></div>
+
+	<!-- ======= About Us Section ======= -->
+	<section id="about" class="about">
+		<div class="container">
+			<div class="row no-gutters">
+				<div class="col-lg-6 video-box">
+					<img src="assets/img/about.jpg" class="img-fluid" alt=""> <a
+						href="https://www.youtube.com/watch?v=jDDaplaOz7Q"
+						class="venobox play-btn mb-4" data-vbtype="video"
+						data-autoplay="true"></a>
+				</div>
+
+				<div
+					class="col-lg-6 d-flex flex-column justify-content-center about-content">
+
+					<div class="section-title">
+						<h2>About Us</h2>
+						<p>Magnam dolores commodi suscipit. Necessitatibus eius
+							consequatur ex aliquid fuga eum quidem. Sit sint consectetur
+							velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit
+							suscipit alias ea.</p>
+					</div>
+
+					<div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+						<div class="icon">
+							<i class="bx bx-fingerprint"></i>
+						</div>
+						<h4 class="title">
+							<a href="">Lorem Ipsum</a>
+						</h4>
+						<p class="description">Voluptatum deleniti atque corrupti quos
+							dolores et quas molestias excepturi sint occaecati cupiditate non
+							provident</p>
+					</div>
+
+					<div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+						<div class="icon">
+							<i class="bx bx-gift"></i>
+						</div>
+						<h4 class="title">
+							<a href="">Nemo Enim</a>
+						</h4>
+						<p class="description">At vero eos et accusamus et iusto odio
+							dignissimos ducimus qui blanditiis praesentium voluptatum
+							deleniti atque</p>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+	</section>
+	<!-- End About Us Section -->
+
+	<!-- ======= About Lists Section ======= -->
+
+
+	<!-- ======= Counts Section ======= -->
+	<section class="counts section-bg">
+		<div class="container">
+
+			<div class="row">
+
+				<div class="col-lg-3 col-md-6 text-center" data-aos="fade-up">
+					<div class="count-box">
+						<i class="icofont-simple-smile" style="color: #20b38e;"></i> <span
+							data-toggle="counter-up">232</span>
+						<p>Happy Clients</p>
+					</div>
+				</div>
+
+				<div class="col-lg-3 col-md-6 text-center" data-aos="fade-up"
+					data-aos-delay="200">
+					<div class="count-box">
+						<i class="icofont-document-folder" style="color: #c042ff;"></i> <span
+							data-toggle="counter-up">521</span>
+						<p>Projects</p>
+					</div>
+				</div>
+
+				<div class="col-lg-3 col-md-6 text-center" data-aos="fade-up"
+					data-aos-delay="400">
+					<div class="count-box">
+						<i class="icofont-live-support" style="color: #46d1ff;"></i> <span
+							data-toggle="counter-up">1,463</span>
+						<p>Hours Of Support</p>
+					</div>
+				</div>
+
+				<div class="col-lg-3 col-md-6 text-center" data-aos="fade-up"
+					data-aos-delay="600">
+					<div class="count-box">
+						<i class="icofont-users-alt-5" style="color: #ffb459;"></i> <span
+							data-toggle="counter-up">15</span>
+						<p>Hard Workers</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<section id="contact" class="contact">
+		<div class="container">
+
+			<div class="section-title">
+				<h2>Contact Us</h2>
+			</div>
+
+			<div class="row">
+
+				<div class="col-lg-6 d-flex align-items-stretch" data-aos="fade-up">
+					<div class="info-box">
+						<i class="bx bx-map"></i>
+						<h3>Our Address</h3>
+						<p>A108 Adam Street, New York, NY 535022</p>
+					</div>
+				</div>
+
+				<div class="col-lg-3 d-flex align-items-stretch" data-aos="fade-up"
+					data-aos-delay="100">
+					<div class="info-box">
+						<i class="bx bx-envelope"></i>
+						<h3>Email Us</h3>
+						<p>
+							info@example.com<br>contact@example.com
+						</p>
+					</div>
+				</div>
+
+				<div class="col-lg-3 d-flex align-items-stretch" data-aos="fade-up"
+					data-aos-delay="200">
+					<div class="info-box ">
+						<i class="bx bx-phone-call"></i>
+						<h3>Call Us</h3>
+						<p>
+							+1 5589 55488 55<br>+1 6678 254445 41
+						</p>
+					</div>
+				</div>
+
+				<div class="col-lg-12" data-aos="fade-up" data-aos-delay="300">
+					<form action=""  role="form"
+						class="php-email-form">
+						<div class="form-row">
+							<div class="col-lg-6 form-group">
+								<input type="text" name="name" class="form-control" id="userName"
+									placeholder="Your Name"/>
+								<div id="error_userName" class="errorMsg"></div>
+							</div>
+							
+							<div class="col-lg-6 form-group">
+								<input type="email" class="form-control" name="userEmail" id="userEmail"
+									placeholder="Your Email" />
+								<div id="error_userEmail" class="errorMsg"></div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<input type="text" class="form-control" name="userSubject"
+								id="userSubject" placeholder="Subject"/>
+					          <div id="error_userSubject" class="errorMsg"></div>
+						</div>
+						
+						<div class="form-group">
+							<textarea class="form-control" name="userMessage" id="userMessage" rows="5"
+								placeholder="Message"></textarea>
+							 <div id="error_userMessage" class="errorMsg"></div>
+						</div>
+						
+						<div class="mb-3">
+							 <div class="alert alert-success alert-dismissible" id="contactMsgId" style="display:none;">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Message send successfully.We will contact with you as soon as possible.
+  </div>
+						</div>
+						
+						
+						<div class="text-center">
+							<button type="submit" id="btnSubmit">Send Message</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Contact Us Section -->
+
+
+
+</div>
+
+<div layout:fragment="usercss">
+
+<style>
+.errorMsg{
+  color:red;
+  font-size:11px;
+}
+</style>
+
+</div>
+
+<div layout:fragment="userscript">
+
+<script>
+$(document).ready(function(){
+	
+	
+	 $("#urlContact").css('display','block');
+	 $("#urlAbout").css('display','block');
+
+	  $("#btnSubmit").click(function() {
+		  
+		  
+		 
+		  
+		  if (dataValidation()) {
+			 
+			  
+			  var uniList = {};
+				uniList.userName = $("#userName").val();
+				uniList.userEmail = $("#userEmail").val();
+				uniList.userSubject = $("#userSubject").val();
+				uniList.userMessage = $("#userMessage").val();
+				
+				
+				$
+						.ajax({
+							type : "POST",
+							contentType : "application/json",
+							url : "/user/saveContact",
+							data : JSON
+									.stringify(uniList),
+							timeout : 100000,
+							async : true,
+							dataType : 'json',
+							success : function(data) {
+								
+								if(data.msgCode=='200'){
+									
+									$("#userName").val('');
+									$("#userEmail").val('');
+									$("#userSubject").val('');
+									$("#userMessage").val('');
+									
+									 $("#contactMsgId").css('display','block');
+									 
+									 setTimeout(function(){
+										 $("#contactMsgId").fadeOut();
+										 $("#contactMsgId").css('display','none');
+										 }, 5000);
+									
+									//sent-message
+									
+									//Your message has been sent. Thank
+									//you!
+									
+								}
+							
+							},
+							error : function(
+									xhr,
+									status,
+									error) {
+								alert("Sorry,Something wrong.Please contact with IT Team!!");
+										
+							}
+						});
+			  
+			  
+		  }
+		  
+		  
+		});
+	  
+	  
+	  function dataValidation(){
+          
+		  var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+		  var status = true;
+		  
+		  if($("#userName").val()==''){
+			  status=false;
+			  $("#error_userName").text('Required Field!!');
+		   }else  $("#error_userName").text('');
+		  
+		  
+		  if($("#userEmail").val()==''){
+			  status=false;
+			  $("#error_userEmail").text('Required Field!!');
+			  
+		  }else if(!pattern.test($("#userEmail").val())){
+			  
+			  status=false;
+			  $("#error_userEmail").text('Invalid Email Address!!');
+			  
+		   }else  $("#error_userEmail").text('');
+		  
+		  
+		  if($("#userSubject").val()==''){
+			  status=false;
+			  $("#error_userSubject").text('Required Field!!');
+		   }else  $("#error_userSubject").text('');
+		  
+		  
+		  if($("#userMessage").val()==''){
+			  status=false;
+			  $("#error_userMessage").text('Required Field!!');
+		   }else  $("#error_userMessage").text('');
+		  
+		 
+		  return status;
+		  
+	  }
+	  
+	  
+	 
+	
+});
+</script>
+
+
+</div>

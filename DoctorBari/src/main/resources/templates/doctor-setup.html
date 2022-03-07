@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/base">
+
+<div layout:fragment="adminContent" id="scroll">
+	
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h4 class="m-0">Doctor Basic Information</h4>
+				</div>
+				<!-- /.col -->
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
+						<li class="breadcrumb-item active">Doctor</li>
+					</ol>
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- /.row -->
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="card card-outline card-primary">
+			<div class="card-header">
+				<h3 class="card-title"></h3>
+				<div class="card-tools">
+					<button type="button" class="btn btn-tool"
+						data-card-widget="collapse">
+						<i class="fas fa-minus"></i>
+					</button>
+					<button type="button" class="btn btn-tool"
+						data-card-widget="remove">
+						<i class="fas fa-times"></i>
+					</button>
+				</div>
+			</div>
+			<!-- /.card-header -->
+			<div class="card-body" style="display: block;">
+				
+				   <div class="row">
+					    <div class="col-md-6">
+					    
+					   <div class="form-group">
+							<label>Name<span class="errorMsg">*</span></label> 
+							<input type="hidden" id="updateId"/>
+							<input
+								class="form-control filter" type="text" id="firstname"
+							placeholder="Enter Name"> <span
+								class="errorMsg" id="errorMsgFirstname"></span>
+						</div>
+						
+						
+						
+					    <div class="form-group">
+							<label>Email<span class="errorMsg">*</span></label>
+							<input
+								class="form-control filter" type="text" id="email"
+								placeholder="Enter Email"> <span
+								class="errorMsg" id="errorMsgEmail"></span>
+						</div>
+						
+						
+						<div class="form-group">
+							<label>Password<span class="errorMsg">*</span></label> 
+							<input
+								class="form-control filter" type="password" id="password"
+								placeholder="Enter Password"> <span
+								class="errorMsg" id="errorMsgPassword"></span>
+						</div>
+						
+						
+					
+					    </div>
+					    
+					     <div class="col-md-6">
+					
+						 <div class="form-group">
+							<label>UserName<span class="errorMsg">*</span></label>
+							<input
+								class="form-control filter" type="text" id="userName"
+								placeholder="Enter UserName"> <span
+								class="errorMsg" id="errorMsgUserName"></span>
+						</div>
+						
+						
+							<div class="form-group">
+							<label>Phone<span class="errorMsg">*</span></label> 
+				            <input
+								class="form-control filter" type="text" id="phone"
+								placeholder="Enter Phone"> <span
+								class="errorMsg" id="errorMsgPhone"></span>
+						</div>
+						
+						
+						 </div>
+					
+				</div>
+
+				<div class="margin">
+					<div class="btn-group">
+						<button style="color: #ffffff;" type="button"
+							class="btn btn-block bg-gradient-info btn-sm" id="btn-uni-save">
+							<i class="far fa-save"></i> Save
+						</button>
+					</div>
+
+					<div class="btn-group">
+						<button style="color: #ffffff;" type="button"
+							class="btn btn-block bg-gradient-warning btn-sm"
+							id="btn-uni-reset">
+							<i class="fas fa-sync"></i> Reset
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="card card-default">
+			<div class="card-header">
+				<h3 class="card-title"></h3>
+				<div class="card-tools">
+					<button type="button" class="btn btn-tool"
+						data-card-widget="collapse">
+						<i class="fas fa-minus"></i>
+					</button>
+					<button type="button" class="btn btn-tool"
+						data-card-widget="remove">
+						<i class="fas fa-times"></i>
+					</button>
+				</div>
+			</div>
+			<!-- /.card-header -->
+			<div class="card-body" style="display: block;">
+				<table class="table table-bordered" id="tbl-university">
+					<thead>
+						<tr style="text-align:center;">
+							<th style="width: 10px">#</th>
+							<th>Name</th>
+							<th>UserName</th>
+							<th>Email</th>
+							<th>Phone</th>
+					        <th>Date</th>
+							<th style="width: 100px">Action</th>
+						</tr>
+					</thead >
+					<tbody style="text-align:center;">
+				
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div layout:fragment="script">
+	<script type="text/javascript">
+		$(document)
+				.ready(
+						function() {
+							
+							
+							$("#nav-addDoctor").addClass("active");
+				            $("#doctorId").addClass("active menu-is-opening menu-open");
+				           
+							$("#btn-uni-save")
+									.click(
+											function() {
+
+												if (dataValidation()) {
+													
+													var uniList = {};
+													uniList.userName = $("#userName").val();
+													uniList.firstname = $("#firstname").val();
+													uniList.email = $("#email").val();
+													uniList.phone = $("#phone").val();
+													uniList.password = $("#password").val();
+													uniList.updateId = $("#updateId").val();
+											
+													
+													$
+															.ajax({
+																type : "POST",
+																contentType : "application/json",
+																url : "/admin/ajax/saveDoctor",
+																data : JSON
+																		.stringify(uniList),
+																timeout : 100000,
+																async : true,
+																dataType : 'json',
+																success : function(data) {
+																	
+																	if(data.msgCode=='200'){
+																	 
+																		$.confirm({
+										                     		         	type: 'green',
+										                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+										                     		            content: 'Save Ambulance successfully.',
+										                     		   
+										                     		             buttons: {
+										                     		                 ok: function () {
+										                     		                   
+										                     		                 }
+										                     		             }
+										                     		         });
+																		
+																		i=0;
+																		table.ajax.reload();
+																		resetText();
+																		
+																	}else if(data.msgCode=='199'){
+																		
+																		 $.confirm({
+										                     		         	type: 'green',
+										                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+										                     		            content: 'Add doctor information successfully.',
+										                     		   
+										                     		             buttons: {
+										                     		                 ok: function () {
+										                     		                   
+										                     		                 }
+										                     		                 
+										                     		             }
+										                     		         });
+																		
+																		i=0;
+																		table.ajax.reload();
+																		resetText();
+																		
+																		
+																	}else if(data.msgCode=='205'){
+																		
+																		 $.confirm({
+										                     		         	type: 'green',
+										                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+										                     		            content: 'Update doctor information successfully.',
+										                     		   
+										                     		             buttons: {
+										                     		                 ok: function () {
+										                     		                   
+										                     		                 }
+										                     		                 
+										                     		             }
+										                     		         });
+																		
+																		i=0;
+																		table.ajax.reload();
+																		resetText();
+																		
+																		
+																		
+																		
+																		
+																	}else if(data.msgCode=="exitName"){
+																		
+																         $("#errorMsgUserName").text("Name already exit!!");
+																         $("#userName").css('border','1px solid red');
+																		 $("#userName").focus();
+																		 
+																	}else if(data.msgCode=="exitEmail"){
+																		
+																		 $("#errorMsgEmail").text("Email already exit!!");
+																         $("#email").css('border','1px solid red');
+																		 $("#email").focus();
+																		 
+																	}else if(data.msgCode=="exitPhone"){
+																		
+																		 $("#errorMsgPhone").text("Contact no already exit!!");
+																         $("#phone").css('border','1px solid red');
+																		 $("#phone").focus();
+																       
+																	}
+																
+																},
+																error : function(
+																		xhr,
+																		status,
+																		error) {
+																	showCustomAlert(
+																			'D',
+																			"Sorry,Something wrong.Please contact with IT Team!!");
+																}
+															});
+
+												}
+
+											});
+
+							function dataValidation() {
+
+								var status = true;
+								var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i;
+								
+								
+							
+								if ($("#firstname").val() == "") {
+									status = false;
+									$("#errorMsgFirstname").text(
+											"Required Field!!");
+									$("#firstname").css('border',
+											'1px solid red');
+									$("#firstname").focus();
+									return status;
+
+								} else if ($("#firstname").val().length > 150) {
+									status = false;
+									$("#errorMsgFirstname").text(
+											"Allow maximum 150 characters!!");
+									$("#firstname").css('border',
+											'1px solid red');
+									$("#firstname").focus();
+									return status;
+
+								} else if ($("#firstname").val().length < 2) {
+									status = false;
+									$("#errorMsgFirstname").text(
+											"Length must be greater than 2 characters!!");
+									$("#firstname").css('border',
+											'1px solid red');
+									$("#firstname").focus();
+									return status;
+									
+								} else if ($("#firstname").val()<= 1) {
+									status = false;
+									$("#errorMsgFirstname").text(
+											"Length must be greater than 1 characters!!");
+									$("#firstname").css('border',
+											'1px solid red');
+									$("#firstname").focus();
+									return status;
+									
+								} else if ($.isNumeric($("#firstname").val())) {
+									status = false;
+									$("#errorMsgFirstname").text(
+											"Invalid Data!!");
+									$("#firstname").css('border',
+											'1px solid red');
+									$("#firstname").focus();
+									return status;
+
+								} else {
+									$("#errorMsgFirstname").text("");
+									$("#firstname").css('border','1px solid #CED4DA');
+								}
+								
+								
+								
+								
+								if ($("#userName").val() == "") {
+									status = false;
+									$("#errorMsgUserName").text(
+											"Required Field!!");
+									$("#userName").css('border',
+											'1px solid red');
+									$("#userName").focus();
+									return status;
+
+								} else if ($("#userName").val().length > 15) {
+									status = false;
+									$("#errorMsgUserName").text(
+											"Allow maximum 15 characters!!");
+									$("#userName").css('border',
+											'1px solid red');
+									$("#userName").focus();
+									return status;
+									
+								} else if ($("#userName").val()< 2) {
+									status = false;
+									$("#errorMsgUserName").text(
+											"Length must be greater than 2 characters!!");
+									$("#userName").css('border',
+											'1px solid red');
+									$("#userName").focus();
+									return status;
+
+								} else {
+									$("#errorMsgUserName").text("");
+									$("#userName").css('border',
+											'1px solid #CED4DA');
+								}
+								
+								
+							
+								if ($("#email").val() == "") {
+									status = false;
+									$("#errorMsgEmail").text(
+											"Required Field!!");
+									$("#email").css('border',
+											'1px solid red');
+									$("#email").focus();
+									return status;
+									
+								}else if(!pattern.test($("#email").val())){
+									status = false;
+									$("#errorMsgEmail").text(
+											"Invalid Email Address!!");
+									$("#email").css('border',
+											'1px solid red');
+									$("#email").focus();
+									return status;
+								} else {
+									$("#errorMsgEmail").text("");
+									$("#email").css('border',
+											'1px solid #CED4DA');
+								}
+								
+								
+								if ($("#phone").val() == "") {
+									status = false;
+									$("#errorMsgPhone").text(
+											"Required Field!!");
+									$("#phone").css('border',
+											'1px solid red');
+									$("#phone").focus();
+									return status;
+								} else {
+									$("#errorMsgPhone").text("");
+									$("#phone").css('border',
+											'1px solid #CED4DA');
+								}
+								
+								
+								if($("#updateId").val() ==''){
+									
+
+									if ($("#password").val() == "") {
+										status = false;
+										$("#errorMsgPassword").text(
+												"Required Field!!");
+										$("#password").css('border',
+												'1px solid red');
+										$("#password").focus();
+										return status;
+										
+									}else if($("#password").val().length<8){
+										status = false;
+										$("#errorMsgPassword").text(
+												"Password must be 8 characters long!!");
+										$("#password").css('border',
+												'1px solid red');
+										$("#password").focus();
+										return status;
+										
+										
+									} else {
+										$("#errorMsgPassword").text("");
+										$("#password").css('border',
+												'1px solid #CED4DA');
+									}
+								}
+								
+								
+							
+								return status;
+							}
+							
+							
+							
+							
+							var i=0;
+							var table = $('#tbl-university')
+									.DataTable(
+											{
+												"sAjaxSource" : "/admin/ajax/get-doctor-list",
+												"sAjaxDataProp" : "",
+												"order" : [ [ 0, "asc" ] ],
+												"aoColumns" : [
+														{
+															"mData" : "userid",
+															"render" : function(data, type, row) {
+																i+=1;
+																return i;
+															}
+														},{
+															"mData" : "firstname"
+														},{
+															"mData" : "userName"
+														},{
+															"mData" : "email"
+														},{
+															"mData" : "phone"
+														},{
+															"mData" : "date",
+															"render" : function(data, type, row) {
+																	return getDate(data);
+																}
+														},{
+															"className" : "dt-btn",
+															"render" : function() {
+																return '<div class="btn-group btn-group-sm"> <a href="#" class="btn btn-info" id="editUnID"><i class="fas fa-user-edit"></i></a><a href="#" class="btn btn-danger" id="deleteUnID"><i class="fas fa-trash"></i></a></div>';
+															}
+														}],
+														"fnCreatedRow": function (nRow, aData, iDataIndex) {
+									                        $('td:eq(1)', nRow).attr("data-id", aData.userid);
+									                     }
+                                              });
+							
+							
+							
+							
+							
+						
+							function resetText() {
+								$("#firstname").val('');
+								$("#errorMsgFirstname").text("");
+								$("#firstname").css('border','1px solid #CED4DA');
+								
+								$("#userName").val('');
+								$("#errorMsgUserName").text("");
+								$("#userName").css('border','1px solid #CED4DA');
+										
+								
+								$("#email").val('');
+								$("#errorMsgEmail").text("");
+								$("#email").css('border','1px solid #CED4DA');
+										
+								
+								$("#phone").val('');
+								$("#errorMsgPhone").text("");
+								$("#phone").css('border','1px solid #CED4DA');
+										
+								
+								$("#password").val('');
+								$("#errorMsgPassword").text("");
+								$("#password").css('border','1px solid #CED4DA');
+								
+								$("#updateId").val('');
+										
+							}
+							
+							
+							$("#btn-uni-reset")
+							.click(
+									function() {
+										resetText();
+										
+									});
+							
+							
+							
+							 $('#tbl-university tbody').on('click', '#deleteUnID', function () {
+								   
+							        var curRow = $(this).closest('tr');
+							        var uniId = curRow.find('td:eq(1)').attr("data-id");
+							        
+							        if (uniId != '') {
+							        	
+							            $.confirm({
+							            	type: 'orange',
+							            	title: '<i class="fa fa-exclamation-triangle" aria-hidden="true" style="color:orange;"></i> '+'Confirm!!',
+							                content: 'Do you want to delete?',
+							                buttons: {
+							                    Yes: function () {
+							                    	
+							                        $.ajax({
+							                            url: "/admin/ajax/deleteDoctor?id=" + uniId,
+							                            type: 'GET',
+							                            dataType: 'json',
+							                            success: function (data) {
+							                            	if(data.msgCode=='200'){
+							                            		i=0;
+																 $.confirm({
+							                     		         	type: 'green',
+							                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+							                     		             content: 'Delete Doctor successfully.',
+							                                             buttons: {
+							                     		                 ok: function () {
+							                     		                   
+							                     		                 }
+							                     		             }
+							                     		         });
+							                            		table.ajax.reload();
+														}
+							                              
+							                            },
+							                            error: function (xhr, status, error) {
+							                                showAlertByType('Something Wrong!', "F");
+							                            }
+							                        });
+							                    },
+							                    No: function () {
+
+							                    }
+							                }
+							            });
+							        }
+							    });
+							
+							
+                           $('#tbl-university tbody').on('click', '#editUnID', function () {
+	                          
+                        	   var curRow = $(this).closest('tr');
+							   var id = curRow.find('td:eq(1)').attr("data-id");
+						       var name = curRow.find('td:eq(1)').text();
+						       var userName = curRow.find('td:eq(2)').text();
+						       var email = curRow.find('td:eq(3)').text();
+						       var phone = curRow.find('td:eq(4)').text();
+						       
+						       $("#updateId").val(id);
+								$("#firstname").val(name);
+								$("#userName").val(userName);
+								$("#email").val(email);
+								$("#phone").val(phone);
+						  
+								
+								   
+								  
+							       $('html, body').animate({
+							            scrollTop: $('#scroll').offset().top
+							        }, 500);
+							    });
+							
+							
+							
+							
+
+						});
+	</script>
+
+</div>
+
+<div layout:fragment="css">
+	<style>
+.errorMsg {
+	color: red;
+	font-size: 13px;
+}
+table.dataTable thead th, table.dataTable thead td {
+    border-bottom: 1px solid #DEE2E6;
+}
+table.dataTable.no-footer {
+    border-bottom: 1px solid #DEE2E6;
+}
+</style>
+</div>

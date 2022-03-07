@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/base">
+
+<div layout:fragment="adminContent">
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h4 class="m-0">DashBoard</h4>
+				</div>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a th:href="@{/doctor/dashboard}">Home</a></li>
+						<li class="breadcrumb-item active">Dashboard</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+				<div class="card-body" style="display: block;">
+				<table class="table table-bordered" id="tbl-user-doctor">
+					<thead>
+						<tr style="text-align:center;">
+							<th>#</th>
+							<th style="width: 150px">Dr.Name</th>
+							<th style="width: 20px">Patient name</th>
+							<th>Time</th>
+							<th>Date</th>
+							<th>Meeting</th>
+						    <th>Prescription</th>
+						    <th style="width: 120px">Dia. Center</th>
+						    <th>Remarks</th>
+						    <th style="width: 260px">Status</th>
+					        <th style="width: 100px">Action</th>
+						</tr>
+					</thead >
+					<tbody style="text-align:center;">
+				
+					</tbody>
+				</table>
+			</div>
+		   </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div layout:fragment="script">
+
+	<script type="text/javascript">
+		$(document)
+				.ready(
+						function() {
+							 
+	                        $("#nav-doctAppoint").addClass("active menu-is-opening menu-open");
+							$("#nav-viewAppoinment").addClass("active");
+						
+							var k=0;
+							var table = $('#tbl-user-doctor')
+							.DataTable(
+									{
+										"sAjaxSource" : "/admin/ajax/admin-doc-app-list",
+										"sAjaxDataProp" : "",
+										"order" : [ [ 0, "asc" ] ],
+										"aoColumns" : [
+												{
+													"mData" : "id",
+													"render" : function(data, type, row) {
+														k+=1;
+														return k;
+													}
+												},{
+													"mData" : "firstname"
+												},{
+													"mData" : "username"
+												},{
+													"mData" : "time"
+												},{
+													"mData" : "date",
+													"render" : function(data, type, row) {
+														return getDate(data);
+													}
+												},{
+													"mData" : "meeting",
+													"render" : function(data, type, row) {
+														
+														var getData='';
+														if(data!=''){
+															getData='<span><a href="'+data+'" target="_blank"> Link</a></span>';
+														}
+														return getData;
+							                            
+						                             }
+												},{
+													"mData" : "filepath",
+													"render" : function(data, type, row) {
+													
+														var getData='';
+														if(data!=''){
+															getData='<span><a href="#" id="btnDownload"><i class="fa fa-download" aria-hidden="true"></i></a></span>';
+														}
+														return getData;
+							                         }
+												},{
+													"mData" : "diaCenter"
+												},{
+													"mData" : "remark"
+												},{
+													"mData" : "status",
+													"render" : function(data, type, row) {
+														 
+														   var getStatus = '';
+														
+							                                if (data == '0') {
+							                                    getStatus = '<span  style="padding:2px;border-radius:5px;background:gray;color:#ffffff;">Awaiting For Meeting</span>';
+							                                } else if(data == '1') {
+							                                   getStatus = '<span  style="padding:2px;border-radius:5px;background:orange;color:#ffffff;">Awaiting For Prescription</span>';
+								                            } else if(data == '2') {
+							                                    getStatus = '<span style="padding:2px;border-radius:5px;background:green;color:#ffffff;">Appoinment Done</span>';
+							                                } else if(data == '3') {
+						                                       getStatus = '<span style="padding:2px;border-radius:5px;background:red;color:#ffffff;">Reject</span>';
+						                                    }
+							                                
+							                                return getStatus;
+						                             }
+												},{
+													"mData" : "status",
+													"render" : function(data, type, row) {
+														return '<div class="btn-group btn-group-sm"><a href="#" class="btn btn-danger" id="deleteUnID"><i class="fa fa-trash"></i></a></div>';
+						                              }
+												}],
+												"fnCreatedRow": function (nRow, aData, iDataIndex) {
+							                        $('td:eq(1)', nRow).attr("data-id", aData.id);
+							                        $('td:eq(2)', nRow).attr("data-id",aData.filepath);
+							                     }
+						              });
+							
+							
+							      
+					
+							
+							 $('#tbl-user-doctor tbody').on('click', '#deleteUnID', function () {
+								   
+								   var curRow = $(this).closest('tr');
+							        var contactId = curRow.find('td:eq(1)').attr("data-id");
+							        
+							        if (contactId != '') {
+							        	
+							            $.confirm({
+							            	type: 'orange',
+							            	title: '<i class="fa fa-exclamation-triangle" aria-hidden="true" style="color:orange;"></i> '+'Confirm!!',
+							                content: 'Do you want to delete?',
+							                buttons: {
+							                    Yes: function () {
+							                    	
+							                        $.ajax({
+							                            url: "/admin/ajax/delete-doctor-appoinment?id=" + contactId,
+							                            type: 'GET',
+							                            dataType: 'json',
+							                            success: function (data) {
+							                            	
+							                            	if(data.msgCode=='200'){
+							                            		i=0;
+																 $.confirm({
+							                     		         	type: 'green',
+							                     		         	title: '<i class="fas fa-check-circle" aria-hidden="true" style="color:#51D88A;"></i> '+'Success!!',
+							                     		             content: 'Delete successfully!!',
+							                                             buttons: {
+							                     		                 ok: function () {
+							                     		                   
+							                     		                 }
+							                     		             }
+							                     		         });
+							                            		table.ajax.reload();
+														}
+							                              
+							                            },
+							                            error: function (xhr, status, error) {
+							                                showAlertByType('Something Wrong!', "F");
+							                            }
+							                        });
+							                    },
+							                    No: function () {
+
+							                    }
+							                }
+							            });
+							        }
+							    });
+							
+							
+						
+						
+						});
+		
+		</script>
+						
+
+</div>
+
+<div layout:fragment="css"></div>

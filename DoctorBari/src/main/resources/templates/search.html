@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="common/layout/userBase">
+
+
+<div layout:fragment="mainContent">
+	<!-- ======= Breadcrumbs Section ======= -->
+	<section class="breadcrumbs">
+		<div class="container">
+			<div class="d-flex justify-content-between align-items-center">
+				<h2>Search Page</h2>
+				<ol>
+					<li><a th:href="@{/}">Home</a></li>
+					<li>Search Page</li>
+				</ol>
+			</div>
+		</div>
+	</section>
+
+	<section class="inner-page">
+	    	<div class="container">
+	        <div class="row">
+			<div class="col-lg-12 col-md-12 ">
+			<div>
+                  <strong><p  style="text-align:center;padding:5px;background:#C92C2D;color:white;border-radius:5px;" th:text="${uniName}"></p></strong> 
+                </div>
+			</div>
+	    	</div>
+	    </div>
+	
+	<div class="container">
+		   <div class="row">
+			<div class="col-lg-3 col-md-3 offset-md-2">
+				<input type="hidden" id="uniId" th:value="${uniId}">
+		        <select id="deptId" class="form-control filter">
+						<option value="">--Select--</option>
+						<option th:each="resultMap : ${getUniversityMap}"
+							th:value="${resultMap.deptId}"
+							th:text="${resultMap.deptName}"></option>
+					</select>
+					<span class="errorMsg" id="errorMsgDeptId"></span>
+				</div>
+
+
+				<div class="col-lg-3 col-md-3">
+					<input class="form-control filter" type="text"
+						placeholder="Enter student Id Or Name" id="stdId">
+						<span class="errorMsg" id="errorMsgstdId"></span>
+				</div>
+				
+
+				<div class="col-lg-4 col-md-4">
+					<button type="button" class="btn btn-sm btn-info" id="btn-search">
+						<i class="icofont-search-job"></i> Search
+					</button>
+					<button type="button" class="btn btn-sm btn-primary"
+						id="btnPrint">
+						<i class="icofont-printer"></i> Print
+					</button>
+				</div>
+			</div>
+
+
+			<div class="row" style="margin-top: 45px; margin-bottom: 40px;">
+				
+				<div class="col-lg-6 col-md-6 offset-md-3 hellow">
+					<div> 
+						<h1 style="text-align: center;">
+							<img  style="border:1px solid #ffffff;" 
+								width="90" height="80" id="searchUniImg">
+							</h5>
+							<h4
+								style="text-align: center;" id="searchUniName"></h4>
+							<h6
+								style="text-align: center;" id="searchStdName"></h6>
+							<h6
+								style="text-align: center;" id="searchStdRollNo"></h6>
+							<h6
+								style="text-align: center;" id="searchStdDeptNo"></h6>
+							<h6
+								style="text-align: center;" id="searchStdEmail"></h6>
+							<h6
+								style="text-align: center;" id="searchStdPhone"></h6>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+<div layout:fragment="usercss">
+<style>
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    height: 36px;
+}
+.errorMsg{
+ color:red;
+ font-size:13px;
+}
+
+.hellow1{
+ background:#EDF7F9;
+ border:7px solid #96D3E5;
+/* background-image: url('assets/img/kk.jpg'); */
+}
+
+.hellow2{
+ background:#FCF8E3;
+ border:1px solid #B94442;
+/* background-image: url('assets/img/not found.jpg'); */
+}
+
+</style>
+
+</div>
+
+<div layout:fragment="userscript">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			
+			$("#urlContact").css('display','none');
+			 $("#urlAbout").css('display','none');
+			
+			 $("#searchUniImg").hide();
+			 $("#btnPrint").hide();
+			// $('#deptId').select2();
+			
+			  $(document).on("click", "#btn-search", function (e) {
+				  
+				  if(dataValidation()){
+					  
+					    var stdBasicInfo = {};
+						stdBasicInfo.uniId = $("#uniId").val();
+						stdBasicInfo.deptId = $("#deptId").val();
+						stdBasicInfo.stdId = $("#stdId").val();
+					
+						$
+						.ajax({
+							type : "POST",
+							contentType : "application/json",
+							url : "/ajax/searchStudent",
+							data : JSON
+									.stringify(stdBasicInfo),
+							timeout : 100000,
+							async : true,
+							dataType : 'json',
+							success : function(data) {
+								
+								if(data!=''){
+									
+									 $(".hellow").removeClass('hellow2');
+									 $(".hellow").addClass('hellow1');
+									 $("#btnPrint").show();
+									 $("#searchUniImg").show();
+									
+									$.each( data, function( key, value ) {
+									        
+										    $("#searchStdName").text('Name: '+value.stdName);
+											$("#searchUniName").text(value.uniName);
+											$("#searchStdRollNo").text('ID No: '+value.std_id);
+											$("#searchStdEmail").text('Email: '+value.email);
+											$("#searchStdPhone").text('Phone: '+value.contact_no);
+											$("#searchStdDeptNo").text('Department: '+value.deptName);
+											$('#searchUniImg').attr("src", 'data:image/jpg;base64,'+value.logo);
+											
+									 });
+									
+								}else{
+									 
+									$("#searchStdName").text('We are sorry, we could not find the data you requested');
+									 $(".hellow").removeClass('hellow1');
+									 $(".hellow").addClass('hellow2');
+									 $("#searchUniImg").hide();
+									 $("#btnPrint").hide();
+									 //$("#searchStdName").text('');
+									 $("#searchUniName").text('');
+									 $("#searchStdRollNo").text('');
+									 $("#searchStdEmail").text('');
+									 $("#searchStdPhone").text('');
+									 $("#searchStdDeptNo").text('');
+									 $('#searchUniImg').attr("src","/assets/img/no-img.PNG");
+									
+								}
+								
+							},
+							error : function(
+									xhr,
+									status,
+									error) {
+							alert('error');
+							}
+						});
+					}
+				 });
+			  
+			
+			
+			
+			  function dataValidation() {
+				  
+				  var status=true;
+				  
+				 
+				  if ($("#deptId").val() == "") {
+						status = false;
+						$("#errorMsgDeptId").text(
+								"Required Field!!");
+						
+						$("#deptId").focus();
+						return status;
+					} else {
+						$("#errorMsgDeptId").text("");
+					}
+				  
+				  
+				  
+				  if ($("#stdId").val() == "") {
+						status = false;
+						$("#errorMsgstdId").text(
+								"Required Field!!");
+						$("#stdId").focus();
+						return status;
+						
+				   }else if($("#stdId").val().length>15){
+						
+					    status = false;
+						$("#errorMsgstdId").text("Allow maximum 15 characters!!");
+						$("#stdId").focus();
+						return status;
+						
+				   }else if($("#stdId").val()<1){
+					      status = false;
+						$("#errorMsgstdId").text("Invalid Field!!");
+						$("#stdId").focus();
+						return status;
+						
+					} else {
+						$("#errorMsgstdId").text("");
+					}
+				  
+				  return status;
+			  }
+			  
+			  
+			  
+			  $("#btnPrint").click(function() {
+				  
+				  window.open('/ajax/generate-report?uniId=' + $("#uniId").val()+'&deptId='+$("#deptId").val()+'&stdId='+$("#stdId").val());
+				
+				  $("#deptId").val('');
+				  $("#stdId").val('');
+					 $(".hellow").removeClass('hellow1');
+					 $(".hellow").removeClass('hellow2');
+					 $("#searchUniImg").hide();
+					 $("#btnPrint").hide();
+					 $("#searchStdName").text('');
+					 $("#searchUniName").text('');
+					 $("#searchStdRollNo").text('');
+					 $("#searchStdEmail").text('');
+					 $("#searchStdPhone").text('');
+					 $("#searchStdDeptNo").text('');
+					 $('#searchUniImg').attr("src","/assets/img/no-img.PNG");
+			  });
+				
+			
+			
+		});
+	</script>
+</div>
