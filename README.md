@@ -10,7 +10,7 @@ This project name is “Doctor-Bari”. This application is developed using Spri
 * Search Diagnostic center<br>
 * View Profile<br>
 * Update Profile<br>
-* LogOut<br>
+* LogOut
 <h4>Admin:</h4>
 * View Schedule List accept or reject</span> <br>
 <br>
