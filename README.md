@@ -11,9 +11,9 @@ This project name is “Doctor-Bari”. This application is developed using Spri
 * View Profile<br>
 * Update Profile<br>
 * LogOut
-<h4>Admin:</h4>
+<h4>Doctor:</h4>
 * View Schedule List accept or reject</span> <br>
-<br>
+
 <h4>Admin:</h4>
 * Add Ambulance Name</span> <br>
 * Add Blood Name</span> <br>
