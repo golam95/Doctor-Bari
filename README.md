@@ -28,3 +28,8 @@ This project name is “Student Verification System”. This application is deve
 </br>
 <img src="DoctorBari/img/06.PNG" width=1200 height=450>
 </br>
+<img src="DoctorBari/img/07.PNG" width=1200 height=450>
+</br>
+<img src="DoctorBari/img/08.PNG" width=1200 height=450>
+</br>
+<img src="DoctorBari/img/09.PNG" width=1200 height=450>
