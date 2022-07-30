@@ -1,5 +1,5 @@
 # Doctor-Bari
-This project name is “Doctor-Bari”. This application is developed using Spring Boot, Jquery, JavaScript, Mysql, Theamleaf template engine.The main purpose of this application is find your nearest doctor.Using this application you can easily find out your nearest doctor,Diagnostic Centers.Each doctors will be evaluated by “Doctor-Bari” application so that only evaluated doctor will be here.There are three role system “Doctor-Bari” application admin,doctors and users.
+This project name is “Doctor-Bari”. This application is developed using Spring Boot, Jquery, JavaScript, Mysql,JasperReports and Theamleaf template engine.The main purpose of this application is find your nearest doctor.Using this application you can easily find out your nearest doctor,Diagnostic Centers.Each doctors will be evaluated by “Doctor-Bari” application so that only evaluated doctor will be here.There are three role system “Doctor-Bari” application admin,doctors and users.
 <h3>Featurs</h3>
 <h4>Users:</h4>
 * login<br> 
